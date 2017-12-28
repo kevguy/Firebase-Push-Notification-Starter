@@ -1,0 +1,29 @@
+import defaultExport, { createSendCustomMsgStream } from '../customMessage';
+
+// https://github.com/facebook/jest/blob/master/examples/module_mock/__tests__/partial_mock.js
+jest.mock('../customMessage', () => {
+  const Rx = require('rxjs/rx');
+
+  const originalModule = require.requireActual('../customMessage');
+  const mockModule = jest.genMockFromModule('../customMessage');
+
+  // Mock the default export and named export
+  return Object.assign({}, mockModule, originalModule, {
+    createSendCustomMsgStream: jest.fn((msg: string, userId: string) => {
+      return Rx.Observable.of({ status: 'success', result: 'success' });
+    })
+  });
+});
+
+const mockData: CustomMsg = { userId: 'foo', message: 'bar' };
+
+describe('Custom Message', () => {
+  it('should send custom message', (done) => {
+    createSendCustomMsgStream(mockData)
+      .subscribe(
+        (result: Payload) => { expect(result).toHaveProperty('status', 'success'); },
+        (err: Error) => { expect(err).toHaveProperty('status', 'failure'); },
+        () => { expect(createSendCustomMsgStream).toHaveBeenCalledTimes(1); done(); }
+      );
+  });
+});

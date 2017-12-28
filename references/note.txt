@@ -1,0 +1,12 @@
+https://stackoverflow.com/questions/42224908/how-to-get-gcm-sender-id-for-website-in-firebase
+Put in manifest.json
+
+
+https://console.cloud.google.com/apis/library/fcm.googleapis.com/
+Enable Cloud messaging
+
+Get Server Key
+
+Get Service Account json
+
+Add firebase to web app

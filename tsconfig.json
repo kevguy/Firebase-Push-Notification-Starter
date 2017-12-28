@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "outDir": "./built/",
+        "sourceMap": true,
+        "strict": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "target": "es5",
+        "experimentalDecorators": true,
+        "noImplicitThis": false,
+        "noImplicitAny": false,
+        "noImplicitReturns": false,
+        "strictNullChecks": false
+    },
+    "include": [
+        "./src/**/*"
+    ],
+    "exclude": [
+  		"src/**/__tests__/*"
+  	]
+}
