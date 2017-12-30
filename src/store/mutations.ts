@@ -18,13 +18,15 @@ export default <MutationTree<State>>{
     state.userId = userId;
     // localStorage.setItem('userId', userId);
     Cookies.set('userId', userId, { expires: 3, secure: true });
+    document.cookie = `iceicebaby=${JSON.stringify({ userId: state.userId, authToken: state.authToken })}`;
   },
 
   SAVE_AUTH_TOKEN: (state: State, authToken: string) => {
     state.authToken = authToken;
     // localStorage.setItem('authToken', token);
     Cookies.set('authToken', authToken, { expires: 3, secure: true });
-    state.isAuth = true;
+    document.cookie = `iceicebaby=${JSON.stringify({ userId: state.userId, authToken: state.authToken })}`;
+    // state.isAuth = true;
   },
 
   SET_AUTH: (state: State) => {

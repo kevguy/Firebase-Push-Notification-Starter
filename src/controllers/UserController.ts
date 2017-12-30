@@ -23,13 +23,15 @@ export function signupUserHandler(req: Request, res: Response, next: NextFunctio
       const token = jwt.sign({ id: user._id }, 'linkinpark', {
         expiresIn: 86400 // expires in 24 hours
       });
-      res.send({ status: 'success', auth: true, token });
+      res
+        // .cookie('iceicebaby' , JSON.stringify({ userId: req.body.userId, authToken: token }))
+        .send({ status: 'success', auth: true, token });
     });
   });
 }
 
 export function loginHandler(req: Request, res: Response, next: NextFunction) {
-  User.findOne({ email: req.body.email }, (err: any, user: any) => {
+  User.findOne({ userId: req.body.userId }, (err: any, user: any) => {
     if (err) return res.status(500).send('Error on the server.');
     if (!user) return res.status(404).send('No user found.');
     var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
@@ -37,7 +39,10 @@ export function loginHandler(req: Request, res: Response, next: NextFunction) {
     const token = jwt.sign({ id: user._id }, 'linkinpark', {
       expiresIn: 86400 // expires in 24 hours
     });
-    res.status(200).send({ auth: true, token: token });
+    res
+      // .cookie('iceicebaby' , JSON.stringify({ userId: req.body.userId, authToken: token }))
+      .status(200)
+      .send({ auth: true, token: token });
   });
 }
 

@@ -42,6 +42,7 @@ export default <ActionTree<State, any>>{
       if (result.auth) {
         // commit('SAVE_AUTH_TOKEN', authToken);
         // commit('SAVE_USER_ID', userId);
+        commit('SET_AUTH');
       } else {
         commit('RESET_AUTH');
       }

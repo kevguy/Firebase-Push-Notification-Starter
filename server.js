@@ -161,10 +161,10 @@ function render (req, res) {
 }
 
 
-// app.use((req, res, next) => {
-//   console.log(req);
-//   next();
-// })
+app.use((req, res, next) => {
+  console.log(req.cookies);
+  next();
+})
 
 // for handling API routes
 // example: baseUrl/API/...

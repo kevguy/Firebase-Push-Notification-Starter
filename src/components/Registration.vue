@@ -71,6 +71,7 @@ export default {
 
       const url = `/user/signup`;
       const res = await fetch(url, {
+        credentials: 'same-origin',
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -84,6 +85,9 @@ export default {
         // save token to state
         this.$store.commit('SAVE_AUTH_TOKEN', this.result.token);
         this.$store.commit('SAVE_USER_ID', this.userId);
+        this.$store.commit('SET_AUTH');
+      } else {
+        this.$store.commit('RESET_AUTH');
       }
     },
     async login() {
@@ -98,6 +102,7 @@ export default {
 
       const url = `/user/login`;
       const res = await fetch(url, {
+        credentials: 'same-origin',
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -111,12 +116,16 @@ export default {
         // save token to state
         this.$store.commit('SAVE_AUTH_TOKEN', this.result.token);
         this.$store.commit('SAVE_USER_ID', this.userId);
+        this.$store.commit('SET_AUTH');
         this.$router.push({ path: 'device-group-info' });
+      } else {
+        this.$store.commit('RESET_AUTH');
       }
     },
     async testAuth() {
       const url = `/user/auth`;
       const res = await fetch(url, {
+        // credentials: 'same-origin',
         method: 'POST',
         headers: {
           'Accept': 'application/json',

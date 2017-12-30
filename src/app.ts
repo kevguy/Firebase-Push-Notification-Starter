@@ -25,7 +25,7 @@ export function createApp() {
 
     console.log('beforeEach');
     // console.log(localStorage);
-    const result = await store.dispatch('UPDATE_AUTH_STATE');
+    // const result = await store.dispatch('UPDATE_AUTH_STATE');
     // console.log(result);
     console.log(store.state.isAuth);
 

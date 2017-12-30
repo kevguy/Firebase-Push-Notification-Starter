@@ -31,7 +31,8 @@ export default function apiRoutes(app: Application): void {
     // if (<string>(req.url).startsWith('/user/') || <string>(req.url).startsWith('/api/')) {
 		if ((req.url.indexOf('/user/') >= 0 ||
 			req.url.indexOf('/api/') >= 0) &&
-			req.url.indexOf('/user/login') < 0) {
+			req.url.indexOf('/user/login') < 0 &&
+			req.url.indexOf('/user/signup') < 0) {
       // verify token
       const token: string = <string>(req.headers['x-access-token']);
       if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
