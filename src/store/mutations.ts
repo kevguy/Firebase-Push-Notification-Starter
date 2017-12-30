@@ -12,6 +12,22 @@ interface SetItemsPayload { items: Array<Item> };
 interface SetUserPayload { id: number; user: User; };
 
 export default <MutationTree<State>>{
+  SAVE_USER_ID: (state: State, userId: string) => {
+    state.currentUserId = userId;
+  },
+
+  SAVE_AUTH_TOKEN: (state: State, token: string) => {
+    state.authToken = token;
+    localStorage.setItem('authToken', token);
+    state.isAuth = true;
+  },
+
+  RESET_AUTH: (state: State) => {
+    state.authToken = '';
+    localStorage.setItem('authToken', '');
+    state.isAuth = false;
+  },
+
   SET_DEVICE_TOKEN: (state: State, token: string) => {
     state.deviceToken = token;
   },

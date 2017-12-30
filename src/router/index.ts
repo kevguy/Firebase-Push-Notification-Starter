@@ -7,6 +7,7 @@ Vue.use(Router);
 const TokenView = () => import('../views/TokenView.vue');
 const DeviceGroupView = () => import('../views/DeviceGroupView.vue');
 const DirectMessage = () => import('../views/DirectMessageView.vue');
+const Authentication = () => import('../views/Authentication.vue');
 
 export function createRouter (): Router {
   return new Router({
@@ -17,7 +18,9 @@ export function createRouter (): Router {
       { path: '/tokens-info', component: TokenView },
       { path: '/device-group-info', component: DeviceGroupView },
       { path: '/direct-message-info', component: DirectMessage },
-      { path: '/', redirect: '/tokens-info' }
+      { path: '/signup', component: Authentication },
+      // { path: '/', redirect: '/tokens-info' }
+      { path: '/', redirect: '/signup' }
     ]
   } as RouterOptions);
 }

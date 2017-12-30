@@ -21,6 +21,17 @@ export function createApp() {
   const store = createStore()
   const router = createRouter()
 
+  router.beforeEach((to, from, next) => {
+    if (store.state.deviceToken === '') {
+      // user doesn't have a token for push notification yet
+      next({
+        path: '/'
+      });
+    } else {
+      next();
+    }
+  });
+
   // sync the router with the vuex store.
   // this registers `store.state.route`
   sync(store, router)

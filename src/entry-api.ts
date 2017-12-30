@@ -5,12 +5,15 @@ import customMessage from './firebase-api/custom-message';
 import directMessage from './firebase-api/direct-message';
 import saveToken from './firebase-api/save-token';
 import retrieveTokens from './firebase-api/retrieve-tokens';
+// import checkUser from './firebase-api/check-user';
+import * as User from './controllers/UserController';
 
-const handlers: Handlers = {
-  'direct-message': saveToken,
-  'custom-message': customMessage,
-  'token': saveToken
-};
+// const handlers: Handlers = {
+//   'direct-message': saveToken,
+//   'custom-message': customMessage,
+//   'token': saveToken,
+//   'check-user': checkUser
+// };
 
 export default function apiRoutes(app: Application): void {
   /*
@@ -45,5 +48,25 @@ export default function apiRoutes(app: Application): void {
 
   app.get('/api/tokens/:userId', (req: Request, res: Response, next: NextFunction) => {
     retrieveTokens(req.params.userId, req, res, next);
+  });
+
+
+  /**
+   * User-related API
+   */
+  app.post('/user/signup', (req: Request, res: Response, next: NextFunction) => {
+    User.signupUserHandler(req, res, next);
+  });
+
+  app.get('/user/check/:userId', (req: Request, res: Response, next: NextFunction) => {
+    User.checkUserHandler(req.params.userId, req, res, next);
+  });
+
+  app.post('/user/login', (req: Request, res: Response, next: NextFunction) => {
+    User.loginHandler(req, res, next);
+  });
+
+  app.post('/user/auth', (req: Request, res: Response, next: NextFunction) => {
+    User.authHandler(req, res, next);
   });
 }

@@ -9,9 +9,16 @@ const resolve = file => path.resolve(__dirname, file)
 const { createBundleRenderer } = require('vue-server-renderer')
 const bodyParser = require('body-parser')
 const dotenv = require('dotenv')
+
+const session = require('express-session')
+const mongo = require('connect-mongo')
+const mongoose = require('mongoose')
+
+require('isomorphic-fetch')
+
 const apiRoutes = require('./dist/api-bundle.js').default
-console.log(apiRoutes);
-require('isomorphic-fetch');
+
+
 
 const isProd = process.env.NODE_ENV === 'production'
 const useMicroCache = process.env.MICRO_CACHE !== 'false'
@@ -20,13 +27,23 @@ const serverInfo =
   `vue-server-renderer/${require('vue-server-renderer/package.json').version}`
 
 
+const MongoStore = mongo(session)
+
+
 /**
  * Load environment variables from .env file file, where stuff like API keys
  * and passwords and whatnot are configured
  */
-dotenv.config({ path: '.env' });
+dotenv.config({ path: '.env' })
 
 const app = express()
+
+mongoose.connect(process.env.MONGOLAB_URI || process.env.MONGODB_URI);
+mongoose.connection.on('error', () => {
+  console.log('MongoDB connection error. Please make sure MongoDB is running.');
+  process.exit();
+})
+
 
 function createRenderer (bundle, options) {
   // https://github.com/vuejs/vue/blob/dev/packages/vue-server-renderer/README.md#why-use-bundlerenderer
@@ -88,6 +105,15 @@ app.use('/dist', serve('./dist', true))
 app.use('/public', serve('./public', true))
 app.use('/manifest.json', serve('./manifest.json', true))
 app.use('/service-worker.js', serve('./dist/service-worker.js'))
+app.use(session({
+  resave: true,
+  saveUninitialized: true,
+  secret: 'linkinpark',
+  store: new MongoStore({
+    url: process.env.MONGOLAB_URI || process.env.MONGODB_URI,
+    autoReconnect: true
+  })
+}));
 
 // since this app has no user-specific content, every page is micro-cacheable.
 // if your app involves user-specific content, you need to implement custom

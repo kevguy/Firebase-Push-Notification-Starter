@@ -11,6 +11,9 @@ Vue.use(Vuex);
 export function createStore (): Store<State> {
   return new Vuex.Store({
     state: {
+      isAuth: false,
+      authToken: '',
+      currentUserId: '',
       debugUsers: [
         { username: 'Kev', userId: '-999' },
         { username: 'Milton', userId: '-998' },
@@ -85,6 +88,9 @@ export interface SnackBarMsg {
 };
 
 export interface State {
+  isAuth: boolean;
+  authToken: string;
+  currentUserId: string;
   debugUsers: Array<DebugUser>;
   availableLangs: Array<string>;
   deviceToken: string;
