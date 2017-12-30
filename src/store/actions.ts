@@ -23,6 +23,32 @@ import { ActionTree, ActionContext, Dispatch, Commit } from "vuex";
 // }
 
 export default <ActionTree<State, any>>{
+  UPDATE_AUTH_STATE: async ({ commit, state }: any) => {
+    // const authToken = localStorage ? localStorage.getItem('authToken') : '';
+    // const currentUserId = localStorage ? localStorage.getItem('userId') : '';
+    if (!state.authToken || !state.userId) { commit('RESET_AUTH'); }
+    if (state.authToken) {
+      const url = `/user/auth`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'x-access-token': state.authToken
+        },
+        body: JSON.stringify({})
+      });
+      const result = await res.json();
+      if (result.auth) {
+        // commit('SAVE_AUTH_TOKEN', authToken);
+        // commit('SAVE_USER_ID', userId);
+      } else {
+        commit('RESET_AUTH');
+      }
+    }
+  },
+
+
   FETCH_DEBUG_USERS: ({ commit, state }: any) => {
     return Promise.resolve(state.debugUsers);
   },

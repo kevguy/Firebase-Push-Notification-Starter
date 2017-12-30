@@ -21,15 +21,41 @@ export function createApp() {
   const store = createStore()
   const router = createRouter()
 
-  router.beforeEach((to, from, next) => {
-    if (store.state.deviceToken === '') {
-      // user doesn't have a token for push notification yet
-      next({
-        path: '/'
-      });
-    } else {
+  router.beforeEach(async (to, from, next) => {
+
+    console.log('beforeEach');
+    // console.log(localStorage);
+    const result = await store.dispatch('UPDATE_AUTH_STATE');
+    // console.log(result);
+    console.log(store.state.isAuth);
+
+    if (to.fullPath === '/signup' && !store.state.isAuth) {
       next();
+      return;
     }
+
+    if (to.fullPath === '/signup' && store.state.isAuth) {
+      next({
+        path: '/device-group-info'
+      });
+      return;
+    }
+
+    if (!store.state.isAuth) {
+      next({
+        path: '/signup'
+      });
+      return;
+    }
+
+    // if (store.state.deviceToken === '') {
+    //   // user doesn't have a token for push notification yet
+    //   next({
+    //     path: '/'
+    //   });
+    //   return;
+    // }
+    next();
   });
 
   // sync the router with the vuex store.

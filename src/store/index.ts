@@ -12,8 +12,10 @@ export function createStore (): Store<State> {
   return new Vuex.Store({
     state: {
       isAuth: false,
+      isMsgPermitted: false,
+      isFirebaseSetup: false,
       authToken: '',
-      currentUserId: '',
+      userId: '',
       debugUsers: [
         { username: 'Kev', userId: '-999' },
         { username: 'Milton', userId: '-998' },
@@ -23,12 +25,12 @@ export function createStore (): Store<State> {
       ],
       availableLangs: [ 'zh-hk', 'en' ],
       deviceToken: 'Not Yet Retrieved',
-      deviceUserId: 'Not Yet Retrieved',
       showSnackbar: false,
       snackbarMsg: {
         message: '',
         actionText: ''
       },
+
       activeType: null,
       itemsPerPage: 20,
       items: {/* [id: number]: Item */},
@@ -89,14 +91,16 @@ export interface SnackBarMsg {
 
 export interface State {
   isAuth: boolean;
+  isMsgPermitted: boolean;
+  isFirebaseSetup: boolean;
   authToken: string;
-  currentUserId: string;
+  userId: string;
   debugUsers: Array<DebugUser>;
   availableLangs: Array<string>;
   deviceToken: string;
-  deviceUserId: string;
   showSnackbar: boolean;
   snackbarMsg: SnackBarMsg;
+
   activeType: string | null;
   itemsPerPage: number;
   items: any;

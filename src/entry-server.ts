@@ -12,6 +12,15 @@ export default (context: any) => {
     const s: any = isDev && Date.now()
     const { app, router, store } = createApp()
 
+    //https://forum.vuejs.org/t/accessing-current-request-context-through-vue-instance-for-server-side-rendering-to-be-able-to-access-cookies-for-initial-user-authentication/48/11
+    if (context.cookies.userId) {
+      store.state.userId = context.cookies.userId
+    }
+
+    if (context.cookies.authToken) {
+      store.state.authToken = context.cookies.authToken
+    }
+
     const { url } = context
     const { fullPath } = router.resolve(url).route
 

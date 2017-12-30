@@ -3,6 +3,8 @@ import Vue from 'vue';
 import { MutationTree } from 'vuex';
 import { State , Item, User, SnackBarMsg } from './index';
 
+import * as Cookies from 'js-cookie';
+
 interface SetActiveTypePayload { type: string };
 
 interface SetListPayload { type: string, ids: Array<number> };
@@ -13,28 +15,39 @@ interface SetUserPayload { id: number; user: User; };
 
 export default <MutationTree<State>>{
   SAVE_USER_ID: (state: State, userId: string) => {
-    state.currentUserId = userId;
+    state.userId = userId;
+    // localStorage.setItem('userId', userId);
+    Cookies.set('userId', userId, { expires: 3, secure: true });
   },
 
-  SAVE_AUTH_TOKEN: (state: State, token: string) => {
-    state.authToken = token;
-    localStorage.setItem('authToken', token);
+  SAVE_AUTH_TOKEN: (state: State, authToken: string) => {
+    state.authToken = authToken;
+    // localStorage.setItem('authToken', token);
+    Cookies.set('authToken', authToken, { expires: 3, secure: true });
+    state.isAuth = true;
+  },
+
+  SET_AUTH: (state: State) => {
     state.isAuth = true;
   },
 
   RESET_AUTH: (state: State) => {
     state.authToken = '';
-    localStorage.setItem('authToken', '');
+    // localStorage.setItem('authToken', '');
     state.isAuth = false;
+  },
+
+  SAVE_MSG_PERMISSION: (state: State) => {
+    state.isMsgPermitted = true;
   },
 
   SET_DEVICE_TOKEN: (state: State, token: string) => {
     state.deviceToken = token;
   },
 
-  SET_DEVICE_USER_ID: (state: State, userId: string) => {
-    state.deviceUserId = userId;
-  },
+  // SET_DEVICE_USER_ID: (state: State, userId: string) => {
+  //   state.deviceUserId = userId;
+  // },
 
   SET_SHOW_SNACKBAR: (state: State, show: boolean) => {
     state.showSnackbar = show;

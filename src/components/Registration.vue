@@ -111,6 +111,7 @@ export default {
         // save token to state
         this.$store.commit('SAVE_AUTH_TOKEN', this.result.token);
         this.$store.commit('SAVE_USER_ID', this.userId);
+        this.$router.push({ path: 'device-group-info' });
       }
     },
     async testAuth() {

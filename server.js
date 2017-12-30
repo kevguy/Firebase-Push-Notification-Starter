@@ -9,6 +9,7 @@ const resolve = file => path.resolve(__dirname, file)
 const { createBundleRenderer } = require('vue-server-renderer')
 const bodyParser = require('body-parser')
 const dotenv = require('dotenv')
+const cookieParser = require('cookie-parser')
 
 const session = require('express-session')
 const mongo = require('connect-mongo')
@@ -92,6 +93,7 @@ const serve = (path, cache) => express.static(resolve(path), {
   maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 30 : 0
 })
 
+app.use(cookieParser())
 app.use(compression({ threshold: 0 }))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -143,8 +145,9 @@ function render (req, res) {
   }
 
   const context = {
-    title: 'Vue HN 2.0', // default title
-    url: req.url
+    title: 'Ice Ice Baby', // default title
+    url: req.url,
+    cookies: req.cookies
   }
   renderer.renderToString(context, (err, html) => {
     if (err) {

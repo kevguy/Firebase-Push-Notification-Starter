@@ -14,6 +14,16 @@ import DirectMessage from '../components/DirectMessage.vue';
 export default {
   name: 'direct-message-page',
 
+  // async beforeMount() {
+  //   const authToken = localStorage.getItem('authToken');
+  //   const userId = localStorage.getItem('userId');
+  //   const result = await store.dispatch('UPDATE_AUTH_STATE', { authToken , userId });
+  // },
+
+  mounted() {
+    console.log('direct-message-page mounted');
+  },
+
   components: {
     DirectMessage
   }

@@ -52,12 +52,31 @@ export default {
     };
   },
   async mounted () {
-    this.setupFirebase();
-    this.findUserIdAndToken();
-    if (!this.$store.state.userId && !this.$store.state.token) {
-      await this.askMsgPermission();
+    console.info('mounted');
+    /**
+     * First, verify if user has logged in yet
+     * If user has logged in, setup Firebase if it hasn't
+     *  - then Ask message permission
+     *
+     */
+
+
+    // await this.verifyAuth();
+
+    if (this.$store.state.isFirebaseSetup) {
+      this.setupFirebase();
+      this.retrieveDeviceToken();
     }
-    this.startMessageListener();
+
+    if (this.$store.state.isAuth && !this.$store.state.isMsgPermitted) {
+
+
+      if (!this.$store.state.userId && !this.$store.state.token) {
+        await this.askMsgPermission();
+      }
+      this.startMessageListener();
+    }
+
   },
   computed: {
     deviceToken() {
@@ -68,6 +87,31 @@ export default {
     }
   },
   methods: {
+    async verifyAuth() {
+      const authToken = localStorage.getItem('authToken');
+      const currentUserId = localStorage.getItem('userId');
+
+      if (!authToken || !currentUserId) { this.$store.commit('RESET_AUTH'); }
+      if (authToken) {
+        const url = `/user/auth`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'x-access-token': this.$store.state.authToken
+          },
+          body: JSON.stringify({})
+        });
+        const result = await res.json();
+        if (result.auth) {
+          this.$store.commit('SAVE_AUTH_TOKEN', authToken);
+          this.$store.commit('SAVE_USER_ID', currentUserId);
+        } else {
+          this.$store.commit('RESET_AUTH');
+        }
+      }
+    },
     setupFirebase() {
       const config: any = {
         apiKey: "AIzaSyATXSrM1qq7L-H_xVtF0rwLpPjlbR-7cOo",
@@ -145,11 +189,9 @@ export default {
         this.$store.commit('SET_SHOW_SNACKBAR', true);
       });
     },
-    findUserIdAndToken() {
-      const userId: string = localStorage.getItem('userId');
+    retrieveDeviceToken() {
       const token: string = localStorage.getItem('token');
-      if (userId && token) {
-        this.$store.commit('SET_DEVICE_USER_ID', userId);
+      if (token) {
         this.$store.commit('SET_DEVICE_TOKEN', token);
       }
     },

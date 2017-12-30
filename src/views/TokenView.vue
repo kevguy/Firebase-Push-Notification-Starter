@@ -19,6 +19,16 @@ import Token from '../components/Token.vue';
 export default {
   name: 'token-page',
 
+  // async beforeMount() {
+  //   const authToken = localStorage.getItem('authToken');
+  //   const userId = localStorage.getItem('userId');
+  //   const result = await store.dispatch('UPDATE_AUTH_STATE', { authToken , userId });
+  // },
+
+  mounted() {
+    console.log('token page mounted');
+  },
+
   computed: {
     hasToken() { return this.$store.state.deviceToken !== ''; }
   },

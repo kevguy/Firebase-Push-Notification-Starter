@@ -5,17 +5,48 @@ import customMessage from './firebase-api/custom-message';
 import directMessage from './firebase-api/direct-message';
 import saveToken from './firebase-api/save-token';
 import retrieveTokens from './firebase-api/retrieve-tokens';
-// import checkUser from './firebase-api/check-user';
 import * as User from './controllers/UserController';
+import * as jwt from 'jsonwebtoken';
 
-// const handlers: Handlers = {
-//   'direct-message': saveToken,
-//   'custom-message': customMessage,
-//   'token': saveToken,
-//   'check-user': checkUser
-// };
+// verifyAuthToken
+// -1 no token provided
+// 1 ok
+// -1 failed to authenticate token
+export async function verifyAuthToken(req: Request) {
+  const token: string = <string>(req.headers['x-access-token']);
+  if (!token) return -1;
+
+  const jwtPromise = new Promise((resolve, reject) => {
+    jwt.verify(token, 'linkinpark', (err: any, decoded: any) => {
+      if (err) resolve(-1);
+      resolve(1);
+    })
+  });
+};
+
 
 export default function apiRoutes(app: Application): void {
+
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    // if (<string>(req.url).startsWith('/user/') || <string>(req.url).startsWith('/api/')) {
+		if ((req.url.indexOf('/user/') >= 0 ||
+			req.url.indexOf('/api/') >= 0) &&
+			req.url.indexOf('/user/login') < 0) {
+      // verify token
+      const token: string = <string>(req.headers['x-access-token']);
+      if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+
+      jwt.verify(token, 'linkinpark', function(err: any, decoded: any) {
+        if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+
+        // res.status(200).send(decoded);
+        res.status(200).send({ auth: true, message: 'Authenticated with token.' });
+      });
+    } else {
+      next();
+    }
+  });
+
   /*
    * Handles /api/direct-message
    * sends custom message to a device

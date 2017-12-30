@@ -48,7 +48,7 @@ export function authHandler(req: Request, res: Response, next: NextFunction) {
   jwt.verify(token, 'linkinpark', function(err: any, decoded: any) {
     if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
 
-    res.status(200).send(decoded);
+    res.status(200).send({ auth: true, message: 'Authenticated with token!', decoded });
   });
 }
 
