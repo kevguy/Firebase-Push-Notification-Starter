@@ -1,5 +1,10 @@
 <template lang="html">
   <div class="demo-grid mdc-layout-grid">
+    - Query tokens from a specific device group (choose from available languages), should also the types of the tokens too
+    - add token to a specific language group
+    - remove token from a specific language group
+    - send msg to chosen device group
+    - regarding choosing device group, let user choose user id and language
     <div class="mdc-layout-grid__inner">
       <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
         <AddToken />
@@ -12,8 +17,8 @@
 </template>
 
 <script lang="ts">
-import AddToken from '../components/AddToken.vue';
-import DeviceGroupMessage from '../components/DeviceGroupMessage.vue';
+import AddToken from '../components/deviceGroup/AddToken.vue';
+import DeviceGroupMessage from '../components/deviceGroup/DeviceGroupMessage.vue';
 
 export default {
   name: 'device-group-page',

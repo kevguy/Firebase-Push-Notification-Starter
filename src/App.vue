@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="mdc-typography app-body mdc-drawer-scroll-lock" v-on:click="closeDrawer()">
+  <div id="app" class="mdc-typography app-body mdc-drawer-scroll-lock" v-on:click.stop="closeDrawer1()">
     <header class="mdc-toolbar mdc-toolbar--fixed mdc-elevation--z4">
       <div class="mdc-toolbar__row">
         <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
@@ -207,6 +207,12 @@ export default {
     closeDrawer () {
       this.showMenu = false;
       this.showThreeDotMenu = false;
+      // this.$store.commit('CLOSE_DIALOG');
+    },
+    closeDrawer1 () {
+      this.showMenu = false;
+      this.showThreeDotMenu = false;
+      // this.$store.commit('CLOSE_DIALOG');
     },
     openThreeDotMenu () { this.showThreeDotMenu = true; }
   }
