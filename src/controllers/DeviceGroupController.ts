@@ -5,7 +5,7 @@ import { Observable, Observer } from 'rxjs/Rx';
 export function addTokenToDeviceGroupStream(data: DeviceGroupRecord) {
   const stream = Observable.create((observer: Observer<any>) => {
     DeviceGroup.findOne({ deviceGroup: data.deviceGroup }, (err, existingGroup) => {
-      if (err) { observer.error({ status: 'failure', msg: 'database error' }); }
+      if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
       let deviceGroupData: any;
       if (existingGroup) {
         // https://stackoverflow.com/questions/31775150/node-js-mongodb-the-immutable-field-id-was-found-to-have-been-altered
@@ -25,7 +25,7 @@ export function addTokenToDeviceGroupStream(data: DeviceGroupRecord) {
           { deviceGroup: data.deviceGroup },
           deviceGroupData,
           { upsert: true, new: true }, (err, existingGroup) => {
-        if (err) { console.log(err); observer.error({ status: 'failure', msg: 'database error' }); }
+        if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
         observer.next({ status: 'success', msg: `token saved to device group ${data.deviceGroup}`, result: existingGroup });
         observer.complete();
       })
@@ -34,6 +34,37 @@ export function addTokenToDeviceGroupStream(data: DeviceGroupRecord) {
   return stream;
 }
 
-export function removeTokenFromDeviceGroupStream() {
+export function removeTokenFromDeviceGroupStream(data: DeviceGroupRecord) {
+  const stream = Observable.create((observer: Observer<any>) => {
+    DeviceGroup.findOne({ deviceGroup: data.deviceGroup }, (err, existingGroup) => {
+      if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
+      if (!existingGroup) {
+        observer.error({ status: 'failure', msg: 'record not found' });
+      }
 
+      let deviceGroupData: any;
+      if ((<any>existingGroup).tokens.length === 1) {
+        // delete the record
+        DeviceGroup.remove({ deviceGroup: data.deviceGroup }, (err) => {
+          if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
+          observer.next({ status: 'success', msg: `token deleted from device group ${data.deviceGroup}` });
+        });
+      } else {
+        deviceGroupData =  {
+          deviceGroup: (<any>existingGroup).deviceGroup,
+          userId: (<any>existingGroup).userId,
+          tokens: (<any>existingGroup).tokens.filter((item) => (item !== data.token))
+        };
+        DeviceGroup.findOneAndUpdate(
+            { deviceGroup: data.deviceGroup },
+            deviceGroupData,
+            { upsert: true, new: true }, (err, existingGroup) => {
+          if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
+          observer.next({ status: 'success', msg: `token deleted from device group ${data.deviceGroup}` });
+          observer.complete();
+        })
+      }
+    });
+  });
+  return stream;
 }
