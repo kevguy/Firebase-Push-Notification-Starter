@@ -27,22 +27,32 @@ export async function verifyAuthToken(req: Request) {
 
 export default function apiRoutes(app: Application): void {
 
-  app.use((req: Request, res: Response, next: NextFunction) => {
+  app.use(async (req: Request, res: Response, next: NextFunction) => {
     // if (<string>(req.url).startsWith('/user/') || <string>(req.url).startsWith('/api/')) {
 		if ((req.url.indexOf('/user/') >= 0 ||
 			req.url.indexOf('/api/') >= 0) &&
 			req.url.indexOf('/user/login') < 0 &&
 			req.url.indexOf('/user/signup') < 0) {
       // verify token
+      console.log('verifying token');
       const token: string = <string>(req.headers['x-access-token']);
       if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
 
-      jwt.verify(token, 'linkinpark', function(err: any, decoded: any) {
-        if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+      const result = await new Promise((resolve, reject) => {
+        jwt.verify(token, 'linkinpark', function(err: any, decoded: any) {
+          if (err) resolve(false);
 
-        // res.status(200).send(decoded);
-        res.status(200).send({ auth: true, message: 'Authenticated with token.' });
+          // res.status(200).send(decoded);
+          // res.status(200).send({ auth: true, message: 'Authenticated with token.' });
+          resolve(true);
+        });
       });
+      console.log('finishing verifying token');
+      if (result) {
+        next();
+      } else {
+        return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+      }
     } else {
       next();
     }
@@ -73,6 +83,7 @@ export default function apiRoutes(app: Application): void {
    * save web token and userId into Firebase
    */
   app.post('/api/token', (req: Request, res: Response, next: NextFunction) => {
+    console.log('handling api/token');
     const { type, lang, token, userId }: TokenRecord = req.body;
     const data: TokenRecord = { type, lang, token, userId };
     saveToken(data, req, res, next);

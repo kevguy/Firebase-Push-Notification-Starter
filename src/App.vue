@@ -51,9 +51,20 @@ export default {
      *  - then Ask message permission
      *
      */
+    if (this.isAuth) {
+      console.info('its authenticated!');
+    }
+
+    if (this.isAuth && !this.isFirebaseSetup) {
+      this.setupFirebase();
+      const result = await this.askMsgPermission();
+      if (result) {
+        this.retrieveToken();
+        this.startMessageListener();
+      }
+    }
 
 
-    // await this.verifyAuth();
 
     // if (this.$store.state.isFirebaseSetup) {
     //   this.setupFirebase();
@@ -71,6 +82,9 @@ export default {
 
   },
   computed: {
+    userId() { return this.$store.state.userId; },
+    isAuth() { return this.$store.state.isAuth; },
+    isFirebaseSetup() { return this.$store.state.isFirebaseSetup; },
     deviceToken() {
       return this.$store.state.deviceToken;
     },
@@ -79,31 +93,31 @@ export default {
     }
   },
   methods: {
-    async verifyAuth() {
-      const authToken = localStorage.getItem('authToken');
-      const currentUserId = localStorage.getItem('userId');
-
-      if (!authToken || !currentUserId) { this.$store.commit('RESET_AUTH'); }
-      if (authToken) {
-        const url = `/user/auth`;
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'x-access-token': this.$store.state.authToken
-          },
-          body: JSON.stringify({})
-        });
-        const result = await res.json();
-        if (result.auth) {
-          this.$store.commit('SAVE_AUTH_TOKEN', authToken);
-          this.$store.commit('SAVE_USER_ID', currentUserId);
-        } else {
-          this.$store.commit('RESET_AUTH');
-        }
-      }
-    },
+    // async verifyAuth() {
+    //   const authToken = localStorage.getItem('authToken');
+    //   const currentUserId = localStorage.getItem('userId');
+    //
+    //   if (!authToken || !currentUserId) { this.$store.commit('RESET_AUTH'); }
+    //   if (authToken) {
+    //     const url = `/user/auth`;
+    //     const res = await fetch(url, {
+    //       method: 'POST',
+    //       headers: {
+    //         'Accept': 'application/json',
+    //         'Content-Type': 'application/json',
+    //         'x-access-token': this.$store.state.authToken
+    //       },
+    //       body: JSON.stringify({})
+    //     });
+    //     const result = await res.json();
+    //     if (result.auth) {
+    //       this.$store.commit('SAVE_AUTH_TOKEN', authToken);
+    //       this.$store.commit('SAVE_USER_ID', currentUserId);
+    //     } else {
+    //       this.$store.commit('RESET_AUTH');
+    //     }
+    //   }
+    // },
     setupFirebase() {
       const config: any = {
         apiKey: "AIzaSyATXSrM1qq7L-H_xVtF0rwLpPjlbR-7cOo",
@@ -118,59 +132,63 @@ export default {
     async askMsgPermission() {
       const messaging: any = firebase.messaging();
       try {
-        const result = await messaging.requestPermission()
-        return result;
+        const result = await messaging.requestPermission();
+        return true;
       } catch (err) {
         console.error('Unable to get permission to notify.', err);
+        return false;
       }
     },
-    // retrieveToken() {
-    //   const messaging: any = firebase.messaging();
-    //   const finalUrl = `/api/token`;
-    //   if (!this.chosenLang || (!this.destUserId && !this.chosenDebugUser)) {
-    //     return;
+    // retrieveDeviceToken() {
+    //   const token: string = localStorage.getItem('token');
+    //   if (token) {
+    //     this.$store.commit('SET_DEVICE_TOKEN', token);
     //   }
-    //   if (this.chosenDebugUser) {
-    //     this.destUserId = this.chosenDebugUser;
-    //   }
-    //   const registration = await navigator.serviceWorker.register('/service-worker.js');
-    //   messaging.useServiceWorker(registration);
-    //   const currentToken = await messaging.getToken();
-    //   if (!currentToken) {
-    //     console.error('An error occurred while retrieving token.');
-    //     return;
-    //   };
-    //   console.log('get token!');
-    //   console.log(currentToken);
-    //   const payload = {
-    //     token: currentToken,
-    //     userId: this.destUserId,
-    //     lang: this.chosenLang,
-    //     type: 'web'
-    //   };
-    //   const result = await fetch(finalUrl, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Accept': 'application/json',
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(payload)
-    //   });
-    //   const data = await result.json();
-    //   console.log(data)
-    //   if (data.status === 'failure') {
-    //     console.log('save web token failure');
-    //   } else {
-    //     console.log('save web token success');
-    //     this.hasToken = true;
-    //     this.$store.commit('SET_DEVICE_TOKEN', currentToken);
-    //     this.$store.commit('SET_DEVICE_USER_ID', this.destUserId);
-    //     localStorage.setItem('userId', this.destUserId);
-    //     localStorage.setItem('token', currentToken);
-    //   }
-    //
-    //   return currentToken;
     // },
+    async retrieveToken() {
+      const messaging: any = firebase.messaging();
+      const url = `/api/token`;
+
+      const registration = await navigator.serviceWorker.register('/service-worker.js');
+      messaging.useServiceWorker(registration);
+      const currentToken = await messaging.getToken();
+      if (!currentToken) {
+        console.error('An error occurred while retrieving token.');
+        return;
+      };
+      console.log('get token!');
+      console.log(currentToken);
+      await this.$store.dispatch('SAVE_WEB_PUSH_TOKEN', {
+        token: currentToken,
+        lang: 'en'
+      });
+
+      // const payload = {
+      //   token: currentToken,
+      //   userId: this.destUserId,
+      //   lang: this.chosenLang,
+      //   type: 'web'
+      // };
+      // const result = await fetch(url, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Accept': 'application/json',
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify(payload)
+      // });
+      // const data = await result.json();
+      // console.log(data)
+      // if (data.status === 'failure') {
+      //   console.log('save web token failure');
+      // } else {
+      //   console.log('save web token success');
+      //   this.hasToken = true;
+      //   this.$store.commit('SET_WEB_PUSH_TOKEN', currentToken);
+      // }
+
+      return currentToken;
+    },
     startMessageListener() {
       const messaging: any = firebase.messaging();
       messaging.onMessage((payload) => {
@@ -180,12 +198,6 @@ export default {
         });
         this.$store.commit('SET_SHOW_SNACKBAR', true);
       });
-    },
-    retrieveDeviceToken() {
-      const token: string = localStorage.getItem('token');
-      if (token) {
-        this.$store.commit('SET_DEVICE_TOKEN', token);
-      }
     },
     openDrawer () { this.showMenu = true; },
     closeDrawer () {

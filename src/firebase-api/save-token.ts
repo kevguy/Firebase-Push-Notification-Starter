@@ -4,6 +4,7 @@ import { setupDatabase } from './custom-firebase/database/utils';
 import * as users from './custom-firebase/database/users';
 import * as userGroups from './custom-firebase/database/userGroups';
 import { getConfig } from './custom-firebase/index';
+import { saveTokenStream } from '../controllers/TokenController';
 
 export function saveUserStream(database: any, record: TokenRecord) {
   return Observable.fromPromise(
@@ -33,10 +34,13 @@ export default function saveToken(
     status: 'success',
     result: []
   };
-  const database = setupDatabase(getConfig());
-  const userStream = saveUserStream(database, record);
-  const notificationKeyStream = createNotificationKeyStream(record);
-  const stream = Observable.merge(userStream, notificationKeyStream);
+  // const database = setupDatabase(getConfig());
+  // const userStream = saveUserStream(database, record);
+  // const notificationKeyStream = createNotificationKeyStream(record);
+  const mongoStream = saveTokenStream(record);
+  // const stream = Observable.merge(userStream, notificationKeyStream);
+  const stream = mongoStream;
+
 
   stream.subscribe(
     (result: {}) => { payload.result.push(result); console.log(result); },

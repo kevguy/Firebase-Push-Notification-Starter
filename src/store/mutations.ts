@@ -14,6 +14,14 @@ interface SetItemsPayload { items: Array<Item> };
 interface SetUserPayload { id: number; user: User; };
 
 export default <MutationTree<State>>{
+  OPEN_DIALOG: (state: State) => {
+    state.showDialog = true;
+  },
+
+  CLOSE_DIALOG: (state: State) => {
+    state.showDialog = false;
+  },
+
   SAVE_USER_ID: (state: State, userId: string) => {
     state.userId = userId;
     // localStorage.setItem('userId', userId);
@@ -39,12 +47,18 @@ export default <MutationTree<State>>{
     state.isAuth = false;
   },
 
+  SET_FIREBASE_SETUP: (state: State, data: boolean) => {
+    state.isFirebaseSetup = data;
+  },
+
   SAVE_MSG_PERMISSION: (state: State) => {
     state.isMsgPermitted = true;
   },
 
-  SET_DEVICE_TOKEN: (state: State, token: string) => {
-    state.deviceToken = token;
+  SET_WEB_PUSH_TOKEN: (state: State, token: string) => {
+    state.webPushToken = token;
+    state.hasWebPushToken = true;
+    localStorage.setItem('webPushToken', token);
   },
 
   // SET_DEVICE_USER_ID: (state: State, userId: string) => {

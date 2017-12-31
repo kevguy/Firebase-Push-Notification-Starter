@@ -15,6 +15,8 @@ export function createStore (): Store<State> {
       isMsgPermitted: false,
       isFirebaseSetup: false,
       authToken: '',
+      webPushToken: '',
+      hasWebPushToken: false,
       userId: '',
       debugUsers: [
         { username: 'Kev', userId: '-999' },
@@ -24,12 +26,12 @@ export function createStore (): Store<State> {
         { username: 'Youseff', userId: '-995'}
       ],
       availableLangs: [ 'zh-hk', 'en' ],
-      deviceToken: 'Not Yet Retrieved',
       showSnackbar: false,
       snackbarMsg: {
         message: '',
         actionText: ''
       },
+      showDialog: false,
 
       activeType: null,
       itemsPerPage: 20,
@@ -94,12 +96,14 @@ export interface State {
   isMsgPermitted: boolean;
   isFirebaseSetup: boolean;
   authToken: string;
+  webPushToken: string;
+  hasWebPushToken: boolean;
   userId: string;
   debugUsers: Array<DebugUser>;
   availableLangs: Array<string>;
-  deviceToken: string;
   showSnackbar: boolean;
   snackbarMsg: SnackBarMsg;
+  showDialog: boolean;
 
   activeType: string | null;
   itemsPerPage: number;

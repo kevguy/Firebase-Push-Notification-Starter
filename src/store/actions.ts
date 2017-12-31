@@ -49,6 +49,41 @@ export default <ActionTree<State, any>>{
     }
   },
 
+  SAVE_WEB_PUSH_TOKEN: async ({ commit, state }: any, { token, lang }: any) => {
+    console.log('trying SAVE_WEB_PUSH_TOKEN');
+    const url = `/api/token`;
+
+    const payload = {
+      token: token,
+      userId: state.userId,
+      lang: lang,
+      type: 'web'
+    };
+
+    const result = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': state.authToken
+      },
+      body: JSON.stringify(payload)
+    });
+    const data = await result.json();
+    console.log(data);
+    if (data.status === 'failure') {
+      return Promise.reject({
+        status: 'failure',
+        msg: 'save web token failure'
+      });
+    } else {
+      commit('SET_WEB_PUSH_TOKEN', token);
+      return Promise.resolve({
+        status: 'success',
+        msg: 'save web token success'
+      });
+    }
+  },
 
   FETCH_DEBUG_USERS: ({ commit, state }: any) => {
     return Promise.resolve(state.debugUsers);
