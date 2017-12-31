@@ -19,10 +19,6 @@ import Token from '../components/Token.vue';
 export default {
   name: 'token-page',
 
-  async beforeMount() {
-    const result = await this.$store.dispatch('UPDATE_AUTH_STATE');
-  },
-
   mounted() {
     console.log('token page mounted');
   },

@@ -27,72 +27,27 @@ export function createApp() {
     console.log('beforeEach');
     console.log('verifying token');
 
+    // keyword: real-auth
+    // client side has to rely on this is get the true state of isAuth
+    // it will get the correct state afterwards,
+    // but not before running router.beforeEach
     const inBrowser = typeof window !== 'undefined' && Object.prototype.toString.call(window) !== '[object Object]';
     if (inBrowser) {
       console.log('inBrowser');
       const result = await store.dispatch('UPDATE_AUTH_STATE');
-      console.log(store.state.isAuth);
-      // console.log(result);
-      // if (result) {
-      //   // save token to state
-      //   store.commit('SET_AUTH');
-      //   // this.$router.push({ path: 'device-group-info' });
-      // } else {
-      //   store.commit('RESET_AUTH');
-      // }
     }
 
-    // console.log(store.state);
-
-    // const omg: Promise<boolean> = new Promise((resolve: any, reject: any) => {
-    //   jwt.verify(store.state.authToken, 'linkinpark', function(err: any, decoded: any) {
-    //     if (err) resolve(false);
-    //     resolve(true);
-    //   });
-    // });
-
-    // const result: any = await new Promise((resolve: any, reject: any) => {
-    //   jwt.verify(store.state.authToken, 'linkinpark', function(err: any, decoded: any) {
-    //     if (err) resolve(false);
-    //     resolve(true);
-    //   });
-    // });
-    // if (result) {
-    //   store.commit('SET_AUTH');
-    // } else {
-    //   store.commit('RESET_AUTH');
-    // }
-
-    // console.log(localStorage);
-    // const result = await store.dispatch('UPDATE_AUTH_STATE');
-    // console.log(result);
-    console.log(`auth ${store.state.isAuth} in router`);
-    console.log(to.fullPath)
-
-    // if (to.fullPath === '/signup' && !store.state.isAuth) {
-    //   next();
-    //   return;
-    // }
-    //
     if (to.fullPath === '/signup' && store.state.isAuth) {
-      console.log('redirecting from signup to device-group-info')
-      // next({
-      //   // redirect: '/device-group-info',
-      //   path: '/device-group-info',
-      //   replace: true
-      // });
-      router.push({
+      next({
         path: '/device-group-info'
       });
       return;
+    } else if (to.fullPath !== '/signup' && !store.state.isAuth) {
+      next({
+        path: '/signup'
+      });
+      return;
     }
-    //
-    // if (!store.state.isAuth) {
-    //   next({
-    //     path: '/signup'
-    //   });
-    //   return;
-    // }
 
     // if (store.state.deviceToken === '') {
     //   // user doesn't have a token for push notification yet

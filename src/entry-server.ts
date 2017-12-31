@@ -13,6 +13,8 @@ export default (context: any) => {
     const s: any = isDev && Date.now()
     const { app, router, store } = createApp()
 
+    // keyword: real-auth
+    // server side relies on this to update the state
     //https://forum.vuejs.org/t/accessing-current-request-context-through-vue-instance-for-server-side-rendering-to-be-able-to-access-cookies-for-initial-user-authentication/48/11
     if (context.cookies.iceicebaby) {
       const data = JSON.parse(context.cookies.iceicebaby)
@@ -27,14 +29,10 @@ export default (context: any) => {
       });
     });
     if (result) {
-      console.log('auth true in server side')
       store.state.isAuth = true;
     } else {
-      console.log('auth false in server side')
       store.state.isAuth = false;
     }
-
-    console.log(context);
 
     const { url } = context
     const { fullPath } = router.resolve(url).route

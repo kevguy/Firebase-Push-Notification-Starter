@@ -14,10 +14,6 @@ import DirectMessage from '../components/DirectMessage.vue';
 export default {
   name: 'direct-message-page',
 
-  async beforeMount() {
-    const result = await this.$store.dispatch('UPDATE_AUTH_STATE');
-  },
-
   mounted() {
     console.log('direct-message-page mounted');
   },

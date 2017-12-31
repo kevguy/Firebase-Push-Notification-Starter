@@ -178,22 +178,4 @@ app.get('*', isProd ? render : (req, res) => {
 const port = process.env.PORT || 8080
 app.listen(port, () => {
   console.log(`server started at localhost:${port}`)
-  // fetch('https://android.googleapis.com/gcm/notification', {
-  //   method: 'POST',
-  //   headers: new Headers({
-  //     'Content-Type': 'application/json',
-  //     'Authorization': `key=${process.env.FIREBASE_SERVER_KEY}`,
-  //     'project_id': process.env.FIREBASE_MESSAGING_SENDER_ID
-  //   }),
-  //   body: JSON.stringify({
-  //     'operation': 'create',
-  //     'notification_key_name': 'fuck_fuck',
-  //     'registration_ids': [ 'dpHcSyezRto:APA91bEJN2oVBSC69aEAiPeHBSHpMqc3bNN7UL6HfWueT6SEC-PIy67A4MfkiKeG0KfEZLaDpK4QfNZ8tncaoNYptHkiD5fu5jE6G2fUqw5rDVKoJKK9pa-ZBuQ2vcVNf-iNlhD-SOyR' ]
-  //   })
-  // })
-  // .then((res) => res.json())
-  // .catch((err) => {
-  //   console.error(`userGroups: failed to create notification key: ${err}`);
-  // })
-  // .then((res) => console.log(res));;
 })

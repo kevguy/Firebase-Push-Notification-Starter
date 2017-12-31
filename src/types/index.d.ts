@@ -40,6 +40,8 @@ declare interface FirebaseMsg {
 
 declare var MyUntypedLibrary: any;
 
+declare var browser: any;
+
 declare module '@material/drawer';
 
 

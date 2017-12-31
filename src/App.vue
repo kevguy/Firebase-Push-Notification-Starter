@@ -12,18 +12,8 @@
         <section class="mdc-toolbar__section mdc-toolbar__section--align-end" role="toolbar">
           <a href="#" class="material-icons mdc-toolbar__icon" aria-label="Download" alt="Download">file_download</a>
           <a href="#" class="material-icons mdc-toolbar__icon" aria-label="Print this page" alt="Print this page">print</a>
-          <a href="#" class="material-icons mdc-toolbar__icon toggle" aria-label="More" alt="More">more_vert</a>
-          <div class="mdc-menu-anchor">
-            <div class="mdc-simple-menu" tabindex="-1" id="demo-menu" style="transform-origin: right top 0px; right: 0px; top: 0px; transform: scale(0, 0);">
-              <ul class="mdc-simple-menu__items mdc-list" role="menu" aria-hidden="true" style="transform: scale(1, 1);">
-                <li class="mdc-list-item" role="menuitem" tabindex="0" style="">Back</li>
-                <li class="mdc-list-item" role="menuitem" tabindex="0" style="">Forward</li>
-                <li class="mdc-list-item" role="menuitem" tabindex="0" style="">Reload</li>
-                <li class="mdc-list-divider" role="separator"></li>
-                <li class="mdc-list-item" role="menuitem" tabindex="0" style="">Save As...</li>
-              </ul>
-            </div>
-          </div>
+          <a href="#" class="material-icons mdc-toolbar__icon toggle" aria-label="More" alt="More" v-on:click.stop="openThreeDotMenu()">more_vert</a>
+          <ThreeDotMenu v-bind:show="showThreeDotMenu"/>
         </section>
       </div>
     </header>
@@ -41,14 +31,16 @@
 
 <script lang="ts">
 import Drawer from './components/Drawer.vue';
+import ThreeDotMenu from './components/ThreeDotMenu.vue';
 import Snackbar from './components/Snackbar.vue';
 
 export default {
   name: 'main-app',
-  components: { Drawer, Snackbar },
+  components: { Drawer, ThreeDotMenu, Snackbar },
   data: () => {
     return {
-      showMenu: false
+      showMenu: false,
+      showThreeDotMenu: false
     };
   },
   async mounted () {
@@ -196,7 +188,11 @@ export default {
       }
     },
     openDrawer () { this.showMenu = true; },
-    closeDrawer () { this.showMenu = false; }
+    closeDrawer () {
+      this.showMenu = false;
+      this.showThreeDotMenu = false;
+    },
+    openThreeDotMenu () { this.showThreeDotMenu = true; }
   }
 };
 </script>
