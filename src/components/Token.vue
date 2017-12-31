@@ -4,9 +4,6 @@
       <h1 class="mdc-card__title mdc-card__title--large">Get Token for Device</h1>
       <h2 class="mdc-card__subtitle">Get token for your device (web only)</h2>
     </section>
-    <section class="mdc-card__supporting-text" v-show="tokenList.length > 0">
-      Hi hi
-    </section>
     <section class="mdc-card__primary">
       <form action="#">
         <div>

@@ -18,11 +18,9 @@ import DeviceGroupMessage from '../components/DeviceGroupMessage.vue';
 export default {
   name: 'device-group-page',
 
-  // async beforeMount() {
-  //   const authToken = localStorage.getItem('authToken');
-  //   const userId = localStorage.getItem('userId');
-  //   const result = await store.dispatch('UPDATE_AUTH_STATE', { authToken , userId });
-  // },
+  async beforeMount() {
+    const result = await this.$store.dispatch('UPDATE_AUTH_STATE');
+  },
 
   mounted() {
     console.log('device-group-page mounted');

@@ -1,4 +1,5 @@
 import { createApp } from './app'
+import * as jwt from 'jsonwebtoken';
 
 const isDev = process.env.NODE_ENV !== 'production'
 
@@ -8,7 +9,7 @@ const isDev = process.env.NODE_ENV !== 'production'
 // Since data fetching is async, this function is expected to
 // return a Promise that resolves to the app instance.
 export default (context: any) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const s: any = isDev && Date.now()
     const { app, router, store } = createApp()
 
@@ -18,7 +19,23 @@ export default (context: any) => {
       store.state.userId = data.userId
       store.state.authToken = data.authToken
     }
-    
+
+    const result: any = await new Promise((resolve: any, reject: any) => {
+      jwt.verify(store.state.authToken, 'linkinpark', function(err: any, decoded: any) {
+        if (err) resolve(false);
+        resolve(true);
+      });
+    });
+    if (result) {
+      console.log('auth true in server side')
+      store.state.isAuth = true;
+    } else {
+      console.log('auth false in server side')
+      store.state.isAuth = false;
+    }
+
+    console.log(context);
+
     const { url } = context
     const { fullPath } = router.resolve(url).route
 

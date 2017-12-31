@@ -7,7 +7,7 @@
             <a href="/" class="mdc-toolbar__menu-icon"><i class="material-icons">&#xE5C4;</i></a>
           </span> -->
           <button class="app-menu material-icons mdc-toolbar__menu-icon" v-on:click.stop="openDrawer()">menu</button>
-          <span class="mdc-toolbar__title catalog-title">Ice Ice Baby: {{deviceUserId}} - {{deviceToken}}</span>
+          <span class="mdc-toolbar__title catalog-title">Ice Ice Baby: {{$store.state.isAuth}} {{deviceUserId}} - {{deviceToken}}</span>
         </section>
         <section class="mdc-toolbar__section mdc-toolbar__section--align-end" role="toolbar">
           <a href="#" class="material-icons mdc-toolbar__icon" aria-label="Download" alt="Download">file_download</a>
@@ -63,19 +63,19 @@ export default {
 
     // await this.verifyAuth();
 
-    if (this.$store.state.isFirebaseSetup) {
-      this.setupFirebase();
-      this.retrieveDeviceToken();
-    }
-
-    if (this.$store.state.isAuth && !this.$store.state.isMsgPermitted) {
-
-
-      if (!this.$store.state.userId && !this.$store.state.token) {
-        await this.askMsgPermission();
-      }
-      this.startMessageListener();
-    }
+    // if (this.$store.state.isFirebaseSetup) {
+    //   this.setupFirebase();
+    //   this.retrieveDeviceToken();
+    // }
+    //
+    // if (this.$store.state.isAuth && !this.$store.state.isMsgPermitted) {
+    //
+    //
+    //   if (!this.$store.state.userId && !this.$store.state.token) {
+    //     await this.askMsgPermission();
+    //   }
+    //   this.startMessageListener();
+    // }
 
   },
   computed: {

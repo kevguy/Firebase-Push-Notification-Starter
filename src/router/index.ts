@@ -20,7 +20,7 @@ export function createRouter (): Router {
       { path: '/direct-message-info', component: DirectMessage },
       { path: '/signup', component: Authentication },
       // { path: '/', redirect: '/tokens-info' }
-      { path: '/', redirect: '/signup' }
+      { path: '/', redirect: '/device-group-info' }
     ]
   } as RouterOptions);
 }

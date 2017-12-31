@@ -162,6 +162,7 @@ function render (req, res) {
 
 
 app.use((req, res, next) => {
+  console.log(req.url);
   console.log(req.cookies);
   next();
 })

@@ -51,6 +51,10 @@ export default {
     // this.sendRequest();
   },
 
+  mounted() {
+    console.info('registration mounted');
+  },
+
   computed: {
     isAuth() { return this.$store.state.isAuth; }
   },

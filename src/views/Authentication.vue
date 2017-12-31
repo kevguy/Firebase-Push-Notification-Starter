@@ -5,7 +5,7 @@
         <Registration />
       </div>
       <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
-        
+
       </div>
     </div>
   </div>
@@ -16,6 +16,10 @@ import Registration from '../components/Registration.vue';
 
 export default {
   name: 'authentication-page',
+
+  mounted() {
+    console.info('authentication page mounted');
+  },
 
   computed: {
     hasToken() { return this.$store.state.deviceToken !== ''; }
