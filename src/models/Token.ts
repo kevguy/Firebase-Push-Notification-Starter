@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-export type Token = mongoose.Document & {
+export type TokenModel = mongoose.Document & {
   userId: string,
   token: string,
   lang: string,

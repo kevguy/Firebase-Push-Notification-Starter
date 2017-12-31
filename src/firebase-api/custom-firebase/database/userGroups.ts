@@ -77,7 +77,11 @@ export async function retrieveNotificationKey(record: Partial<TokenRecord>): Pro
     console.error(`userGroups: failed to retrieve notification key from userId ${userId}: ${err}`);
   });
   console.info(result);
-  return result['notification_key'];
+
+  if (result) {
+    return result['notification_key'];
+  }
+  return false;
 }
 
 /**
@@ -123,6 +127,7 @@ async function tokenOp(operator: 'add' | 'remove', record: TokenRecord): Promise
     });
   }
 
+  
   if (notificationKey) {
     console.log('saving stuff to database');
     const database = setupDatabase(getConfig());
@@ -137,6 +142,7 @@ async function tokenOp(operator: 'add' | 'remove', record: TokenRecord): Promise
     console.log('saving stuff to database');
     await database.ref(`deviceGroup/${userId}_${langKey}/${newChildRef.key}`).set({ type, token });
   }
+
   return notificationKey;
 }
 

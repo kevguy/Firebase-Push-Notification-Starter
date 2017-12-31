@@ -14,6 +14,12 @@ declare interface TokenRecord {
   userId: string;
 }
 
+declare interface DeviceGroupRecord {
+  deviceGroup: string;
+  userId: string;
+  token: string;
+}
+
 declare interface Payload {
   status: 'success' | 'failure' | 'unknown';
   result?: any;

@@ -55,6 +55,10 @@ export default {
       console.info('its authenticated!');
     }
 
+    if (this.isFirebaseSetup) {
+      console.info('firebase is setup');
+    }
+
     if (this.isAuth && !this.isFirebaseSetup) {
       this.setupFirebase();
       const result = await this.askMsgPermission();

@@ -4,7 +4,8 @@ import { setupDatabase } from './custom-firebase/database/utils';
 import * as users from './custom-firebase/database/users';
 import * as userGroups from './custom-firebase/database/userGroups';
 import { getConfig } from './custom-firebase/index';
-import { saveTokenStream } from '../controllers/TokenController';
+import * as MongoToken from '../controllers/TokenController';
+import * as MongoDeviceGroup from '../controllers/DeviceGroupController';
 
 export function saveUserStream(database: any, record: TokenRecord) {
   return Observable.fromPromise(
@@ -26,6 +27,9 @@ export function createNotificationKeyStream(record: TokenRecord) {
     .do(() => { console.log('created notification key'); });
 }
 
+/**
+ * Saves token to MongoDb alons with the device group it's associated to
+ */
 export default function saveToken(
     record: TokenRecord,
     req: Request, res: Response, next: NextFunction): void {
@@ -34,20 +38,31 @@ export default function saveToken(
     status: 'success',
     result: []
   };
-  // const database = setupDatabase(getConfig());
-  // const userStream = saveUserStream(database, record);
-  // const notificationKeyStream = createNotificationKeyStream(record);
-  const mongoStream = saveTokenStream(record);
-  // const stream = Observable.merge(userStream, notificationKeyStream);
-  const stream = mongoStream;
 
+  const langKey = record.lang === 'zh-hk' ? 'zh_hk' : 'en';
+  const deviceGroupName = record.userId + '_' + langKey;
+
+  const notificationKeyStream = createNotificationKeyStream(record);
+  const saveTokenStream = MongoToken.saveTokenStream(record);
+  const addTokenToDeviceGroupStream = MongoDeviceGroup.addTokenToDeviceGroupStream({
+    deviceGroup: deviceGroupName,
+    userId: record.userId,
+    token: record.token
+  });
+
+  const stream = notificationKeyStream
+    .flatMap((result: any) => Observable.merge(
+      saveTokenStream,
+      addTokenToDeviceGroupStream
+    ));
 
   stream.subscribe(
-    (result: {}) => { payload.result.push(result); console.log(result); },
+    (result: {}) => { payload.result.push(result); },
     (err: Error) => {
       payload.status = 'failure';
       payload.result.push({ status: 'failure', result: err });
+      res.send(JSON.stringify(payload));
     },
-    () => { console.log('finished, sending the stuff'); console.info(payload); res.send(JSON.stringify(payload)); }
+    () => { res.send(JSON.stringify(payload)); }
   );
 }

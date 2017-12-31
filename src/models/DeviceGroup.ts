@@ -1,15 +1,15 @@
 import * as mongoose from 'mongoose';
 
-export type DeviceGroup = mongoose.Document & {
+export type DeviceGroupModel = mongoose.Document & {
+  deviceGroup: string,
   userId: string,
-  'zh-hk': Array<string>,
-  'en': Array<string>,
+  tokens: Array<string>
 };
 
 const deviceGroupSchema = new mongoose.Schema({
+  deviceGroup: String,
   userId: String,
-  'zh-hk': [String],
-  'en': [String]
+  tokens: [String]
 }, { timestamps: true });
 
 const DeviceGroup = mongoose.model('DeviceGroup', deviceGroupSchema);
