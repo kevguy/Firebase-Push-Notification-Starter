@@ -5,7 +5,7 @@ import customMessage from './firebase-api/custom-message';
 import directMessage from './firebase-api/direct-message';
 import saveToken from './firebase-api/save-token';
 import retrieveTokens from './firebase-api/retrieve-tokens';
-import { queryDeviceGroup } from './firebase-api/device-group';
+import { queryDeviceGroup, queryTokenList } from './firebase-api/device-group';
 import * as User from './controllers/UserController';
 import * as jwt from 'jsonwebtoken';
 
@@ -59,8 +59,14 @@ export default function apiRoutes(app: Application): void {
     }
   });
 
-  app.get('/api/device-group/:userId', (req: Request, res: Response, next: NextFunction) => {
+  app.get('/api/device-group/groups/:userId', (req: Request, res: Response, next: NextFunction) => {
     queryDeviceGroup(req.params.userId, req, res, next);
+  });
+
+  app.get('/api/device-group/tokens/:userId/:lang', (req: Request, res: Response, next: NextFunction) => {
+    const langKey = req.params.lang === 'zh-hk' ? 'zh_hk' : 'en';
+    const deviceGroup = req.params.userId + '_' + langKey;
+    queryTokenList(deviceGroup, req, res, next);
   });
 
   /*

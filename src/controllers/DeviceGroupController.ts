@@ -1,6 +1,7 @@
 import { Application, Request, Response, NextFunction } from 'express';
 import DeviceGroup from '../models/DeviceGroup';
 import { Observable, Observer } from 'rxjs/Rx';
+import { queryTokenStream } from './TokenController';
 
 export function queryDeviceGroupStream(userId: string) {
   const stream = Observable.create((observer: Observer<any>) => {
@@ -15,8 +16,25 @@ export function queryDeviceGroupStream(userId: string) {
   return stream;
 }
 
-export function queryTokenListFromDeviceGroupStream(data: DeviceGroupRecord) {
-
+export function queryTokenListFromDeviceGroupStream(deviceGroup: string) {
+  const tokenResult = [];
+  const stream = Observable.create((observer: Observer<any>) => {
+    DeviceGroup.findOne({ deviceGroup }, (err, result) => {
+      if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
+      observer.next((<any>result).tokens);
+      observer.complete();
+    });
+  })
+  .flatMap((result) => {
+    if (result) {
+      const streams = result.map((item) => queryTokenStream(item));
+      return Observable.merge(...streams)
+        .reduce((acc: Array<any>, curr) => [...acc, curr], []);
+    } else {
+      return Observable.of([]);
+    }
+  });
+  return stream;
 }
 
 export function addTokenToDeviceGroupStream(data: DeviceGroupRecord) {

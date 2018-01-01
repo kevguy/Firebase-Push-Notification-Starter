@@ -21,7 +21,7 @@
     </section>
     <hr class="mdc-list-divider separating-line">
     <section class="mdc-card__primary">
-      fetch('https://iceicebaby.com/api/device-group/{{destUserId}}',{<br>
+      fetch('https://iceicebaby.com/api/device-group/groups/{{destUserId}}',{<br>
       &ensp;method: 'GET',<br>
       &ensp;headers: {<br>
       &ensp;&ensp;'Accept': 'application/json',<br>
@@ -67,9 +67,9 @@ export default {
   },
   methods: {
     async sendRequest() {
-      const url = `/api/device-group/${this.destUserId}`;
+      const url = `/api/device-group/groups/${this.destUserId}`;
       this.loading = true;
-      const res = await fetch(`/api/device-group/${this.destUserId}`, {
+      const res = await fetch(`/api/device-group/groups/${this.destUserId}`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',

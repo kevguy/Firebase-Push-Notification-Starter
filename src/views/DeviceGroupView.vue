@@ -15,7 +15,7 @@
         <DeviceGroupList />
       </div>
       <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
-        Query Token List in a device group
+        <TokenList />
       </div>
       <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
         <AddToken />
@@ -31,7 +31,7 @@
 import AddToken from '../components/deviceGroup/AddToken.vue';
 import DeviceGroupMessage from '../components/deviceGroup/DeviceGroupMessage.vue';
 import DeviceGroupList from '../components/deviceGroup/DeviceGroupList.vue';
-
+import TokenList from '../components/deviceGroup/TokenList.vue';
 
 export default {
   name: 'device-group-page',
@@ -41,7 +41,8 @@ export default {
   },
 
   components: {
-    AddToken, DeviceGroupMessage, DeviceGroupList
+    AddToken, DeviceGroupMessage,
+    DeviceGroupList, TokenList
   }
 
 }

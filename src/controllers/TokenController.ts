@@ -22,6 +22,17 @@ export function saveTokenStream(data: TokenRecord) {
   return stream;
 };
 
+export function queryTokenStream(token: string) {
+  const stream = Observable.create((observer: Observer<any>) => {
+    Token.findOne({ token }, (err, result) => {
+      if (err) { console.log(err); observer.error({ status: 'failure', msg: 'database error' }); }
+      observer.next(result);
+      observer.complete();
+    });
+  });
+  return stream;
+}
+
 export function findTokensStream(userId: string) {
   const stream = Observable.create((observer: Observer<any>) => {
     Token.find({ userId }, (err, records) => {
