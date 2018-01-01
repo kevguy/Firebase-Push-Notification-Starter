@@ -46,13 +46,3 @@ export function findTokensStream(userId: string) {
 export function changeLangStream(data: TokenRecord) {
   return saveTokenStream(data);
 }
-
-// export function deleteUserStream(userId: string) {
-//   const stream = Observable.create((observer: Observer) => {
-//     Token.find({ userId }).remove((err) => {
-//       if (err) { observer.error({ status: 'failure', msg: 'database error' }); }
-//       observer.next({ status: 'success', msg: `data associated with ${userId} is deleted` });
-//     });
-//   });
-//   return stream;
-// }

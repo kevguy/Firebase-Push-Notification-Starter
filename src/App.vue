@@ -67,23 +67,6 @@ export default {
         this.startMessageListener();
       }
     }
-
-
-
-    // if (this.$store.state.isFirebaseSetup) {
-    //   this.setupFirebase();
-    //   this.retrieveDeviceToken();
-    // }
-    //
-    // if (this.$store.state.isAuth && !this.$store.state.isMsgPermitted) {
-    //
-    //
-    //   if (!this.$store.state.userId && !this.$store.state.token) {
-    //     await this.askMsgPermission();
-    //   }
-    //   this.startMessageListener();
-    // }
-
   },
   computed: {
     userId() { return this.$store.state.userId; },
@@ -97,31 +80,6 @@ export default {
     }
   },
   methods: {
-    // async verifyAuth() {
-    //   const authToken = localStorage.getItem('authToken');
-    //   const currentUserId = localStorage.getItem('userId');
-    //
-    //   if (!authToken || !currentUserId) { this.$store.commit('RESET_AUTH'); }
-    //   if (authToken) {
-    //     const url = `/user/auth`;
-    //     const res = await fetch(url, {
-    //       method: 'POST',
-    //       headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json',
-    //         'x-access-token': this.$store.state.authToken
-    //       },
-    //       body: JSON.stringify({})
-    //     });
-    //     const result = await res.json();
-    //     if (result.auth) {
-    //       this.$store.commit('SAVE_AUTH_TOKEN', authToken);
-    //       this.$store.commit('SAVE_USER_ID', currentUserId);
-    //     } else {
-    //       this.$store.commit('RESET_AUTH');
-    //     }
-    //   }
-    // },
     setupFirebase() {
       const config: any = {
         apiKey: "AIzaSyATXSrM1qq7L-H_xVtF0rwLpPjlbR-7cOo",
@@ -143,12 +101,6 @@ export default {
         return false;
       }
     },
-    // retrieveDeviceToken() {
-    //   const token: string = localStorage.getItem('token');
-    //   if (token) {
-    //     this.$store.commit('SET_DEVICE_TOKEN', token);
-    //   }
-    // },
     async retrieveToken() {
       const messaging: any = firebase.messaging();
       const url = `/api/token`;
@@ -166,31 +118,6 @@ export default {
         token: currentToken,
         lang: 'en'
       });
-
-      // const payload = {
-      //   token: currentToken,
-      //   userId: this.destUserId,
-      //   lang: this.chosenLang,
-      //   type: 'web'
-      // };
-      // const result = await fetch(url, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Accept': 'application/json',
-      //     'Content-Type': 'application/json'
-      //   },
-      //   body: JSON.stringify(payload)
-      // });
-      // const data = await result.json();
-      // console.log(data)
-      // if (data.status === 'failure') {
-      //   console.log('save web token failure');
-      // } else {
-      //   console.log('save web token success');
-      //   this.hasToken = true;
-      //   this.$store.commit('SET_WEB_PUSH_TOKEN', currentToken);
-      // }
-
       return currentToken;
     },
     startMessageListener() {
