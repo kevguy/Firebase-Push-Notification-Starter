@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import DirectMessage from '../components/DirectMessage.vue';
+import DirectMessage from '../components/directMessage/DirectMessage.vue';
 
 export default {
   name: 'direct-message-page',

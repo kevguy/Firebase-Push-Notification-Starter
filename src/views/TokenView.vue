@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import TokenList from '../components/TokenList.vue';
+import TokenList from '../components/token/TokenList.vue';
 import Token from '../components/Token.vue';
 
 

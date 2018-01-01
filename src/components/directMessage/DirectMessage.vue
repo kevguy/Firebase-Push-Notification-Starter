@@ -129,7 +129,8 @@ export default {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'x-access-token': this.$store.state.authToken
         },
         body: JSON.stringify(payload)
       });

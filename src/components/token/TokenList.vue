@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import Spinner from './Spinner.vue';
+import Spinner from '../Spinner.vue';
 
 
 export default {
