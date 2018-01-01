@@ -4,13 +4,24 @@
     - add token to a specific language group
     - remove token from a specific language group
     - send msg to chosen device group
+    - query device group associated to user
+    - assign token to another device group
     - regarding choosing device group, let user choose user id and language
     <div class="mdc-layout-grid__inner">
+      <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
+        <DeviceGroupMessage />
+      </div>
+      <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
+        <DeviceGroupList />
+      </div>
+      <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
+        Query Token List in a device group
+      </div>
       <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
         <AddToken />
       </div>
       <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
-        <DeviceGroupMessage />
+        Remove Token from Device Group
       </div>
     </div>
   </div>
@@ -19,6 +30,8 @@
 <script lang="ts">
 import AddToken from '../components/deviceGroup/AddToken.vue';
 import DeviceGroupMessage from '../components/deviceGroup/DeviceGroupMessage.vue';
+import DeviceGroupList from '../components/deviceGroup/DeviceGroupList.vue';
+
 
 export default {
   name: 'device-group-page',
@@ -28,7 +41,7 @@ export default {
   },
 
   components: {
-    AddToken, DeviceGroupMessage
+    AddToken, DeviceGroupMessage, DeviceGroupList
   }
 
 }

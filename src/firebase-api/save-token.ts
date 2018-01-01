@@ -50,11 +50,17 @@ export default function saveToken(
     token: record.token
   });
 
-  const stream = notificationKeyStream
+  const stream = MongoDeviceGroup.queryDeviceGroupStream(record.userId)
+    .flatMap(() => notificationKeyStream)
     .flatMap((result: any) => Observable.merge(
       saveTokenStream,
       addTokenToDeviceGroupStream
-    ));
+  ));
+  // const stream = notificationKeyStream
+  //   .flatMap((result: any) => Observable.merge(
+  //     saveTokenStream,
+  //     addTokenToDeviceGroupStream
+  //   ));
 
   stream.subscribe(
     (result: {}) => { payload.result.push(result); },

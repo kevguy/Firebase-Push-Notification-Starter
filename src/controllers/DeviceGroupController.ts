@@ -2,6 +2,23 @@ import { Application, Request, Response, NextFunction } from 'express';
 import DeviceGroup from '../models/DeviceGroup';
 import { Observable, Observer } from 'rxjs/Rx';
 
+export function queryDeviceGroupStream(userId: string) {
+  const stream = Observable.create((observer: Observer<any>) => {
+    DeviceGroup.find({ userId }, (err, result) => {
+      if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
+      const itemsToBeSent = result.map((item) => ((<any>item).deviceGroup));
+      observer.next(itemsToBeSent);
+      observer.complete();
+      console.log(result);
+    });
+  });
+  return stream;
+}
+
+export function queryTokenListFromDeviceGroupStream(data: DeviceGroupRecord) {
+
+}
+
 export function addTokenToDeviceGroupStream(data: DeviceGroupRecord) {
   const stream = Observable.create((observer: Observer<any>) => {
     DeviceGroup.findOne({ deviceGroup: data.deviceGroup }, (err, existingGroup) => {
@@ -9,10 +26,16 @@ export function addTokenToDeviceGroupStream(data: DeviceGroupRecord) {
       let deviceGroupData: any;
       if (existingGroup) {
         // https://stackoverflow.com/questions/31775150/node-js-mongodb-the-immutable-field-id-was-found-to-have-been-altered
+        const newTokensArr = [...(<any>existingGroup).tokens, data.token]
+          .reduce((a,b) => {
+            if (a.indexOf(b) < 0 ) a.push(b);
+            return a;
+          },[]);
+
         deviceGroupData = {
           deviceGroup: (<any>existingGroup).deviceGroup,
           userId: (<any>existingGroup).userId,
-          tokens: [...(<any>existingGroup).tokens, data.token]
+          tokens: newTokensArr
         };
       } else {
         deviceGroupData = {

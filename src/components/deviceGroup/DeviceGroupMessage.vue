@@ -111,6 +111,7 @@ export default {
 
   },
   computed: {
+    userId() { return this.$store.state.userId; },
     debugUsers () { return this.$store.state.debugUsers; },
     availableLangs() { return this.$store.state.availableLangs; }
   },

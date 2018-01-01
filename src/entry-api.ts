@@ -5,6 +5,7 @@ import customMessage from './firebase-api/custom-message';
 import directMessage from './firebase-api/direct-message';
 import saveToken from './firebase-api/save-token';
 import retrieveTokens from './firebase-api/retrieve-tokens';
+import { queryDeviceGroup } from './firebase-api/device-group';
 import * as User from './controllers/UserController';
 import * as jwt from 'jsonwebtoken';
 
@@ -56,6 +57,10 @@ export default function apiRoutes(app: Application): void {
     } else {
       next();
     }
+  });
+
+  app.get('/api/device-group/:userId', (req: Request, res: Response, next: NextFunction) => {
+    queryDeviceGroup(req.params.userId, req, res, next);
   });
 
   /*
