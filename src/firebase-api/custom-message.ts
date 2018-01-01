@@ -27,14 +27,15 @@ export function createSendCustomMsgToDeviceGroupStream (data: CustomMsg): Observ
 
 
 export default function customMsgHandler (data: CustomMsg, req: Request, res: Response, next: NextFunction): void {
-  // res.setHeader('Content-Type', 'application/json');
   let payload: Payload;
 
-  // createSendCustomMsgToDeviceStream(data)
   createSendCustomMsgToDeviceGroupStream(data)
     .subscribe(
       (result: {}) => { payload = { status: 'success', result }; },
-      (err: Error) => { payload = { status: 'failure', result: err }; },
+      (err: Error) => {
+        payload = { status: 'failure', result: err };
+        res.send(JSON.stringify(payload));
+      },
       () => { console.info(payload); res.send(JSON.stringify(payload)); }
     );
 }

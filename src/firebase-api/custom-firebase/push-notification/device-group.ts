@@ -10,7 +10,7 @@ import * as fetch from 'isomorphic-fetch';
  * @param msg {FirebaseMsg} the message
  */
 export default async function sendNotification(notificationKey: string, msg: FirebaseMsg) {
-  const result = fetch('https://fcm.googleapis.com/fcm/send', {
+  const result = await fetch('https://fcm.googleapis.com/fcm/send', {
     method: 'POST',
     headers: new Headers({
       'Content-Type': 'application/json',
@@ -20,19 +20,16 @@ export default async function sendNotification(notificationKey: string, msg: Fir
     body: JSON.stringify({
       to: notificationKey,
       notification : msg,
-      data : {
-        volume : '3.21.15',
-        contents : 'http://www.news-magazine.com/world-week/21659772'
-      },
-      message: {
-        notification : msg
-      }
+      // data : {
+      //   volume : '3.21.15',
+      //   contents : 'http://www.news-magazine.com/world-week/21659772'
+      // }
     })
   }).then((res) => res.json())
   .then((result) => {
-    console.log(result);
     if (result.error) { throw new Error(result); }
-  })
-  .catch((err) => { console.error(err); });
+    return result;
+  });
+  // .catch((err) => { console.error(err); return err; });
   return result;
 }

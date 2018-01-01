@@ -4,6 +4,12 @@
       <h1 class="mdc-card__title mdc-card__title--large">Send to Device Group</h1>
       <h2 class="mdc-card__subtitle">Send a message to the device group the user belongs to</h2>
     </section>
+    <section class="mdc-card__supporting-text" style="font-style: italic;margin-top: 10px;">
+      The device groups are automatically created when a user is registered,
+      and the number of device groups for each user are determined by the number of languages available.
+      Therefore the device group name chosen here depends on User ID and the the language chosen
+    </section>
+    <hr class="mdc-list-divider separating-line">
     <section class="mdc-card__primary">
       <form action="#">
         <div>
@@ -71,7 +77,8 @@
         </div>
       </form>
     </section>
-    <section class="mdc-card__primary">
+    <section class="mdc-card__primary" v-show="result || loading">
+      <Spinner v-bind:show="loading" />
       <h2 class="mdc-card__subtitle">Result:</h2>
       {{result}}
     </section>
@@ -82,17 +89,22 @@
 </template>
 
 <script lang="ts">
+import Spinner from '../Spinner.vue';
+
 export default {
   name: 'device-group-msg',
+  components: { Spinner },
   data() {
     return {
       destUserId: '',
-      loading: true,
-      chosenDebugUser: '',
       chosenLang: '',
       title: '',
       message: '',
-      result: undefined
+      result: undefined,
+
+      loading: false,
+
+      chosenDebugUser: ''
     };
   },
   created() {
@@ -113,6 +125,8 @@ export default {
   },
   methods: {
     async sendMessage() {
+      this.result = undefined;
+      this.loading = true;
       if (!this.chosenLang ||
         (!this.destUserId && !this.chosenDebugUser)) {
         this.result = 'All fields must be filled!';
@@ -134,19 +148,21 @@ export default {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'x-access-token': this.$store.state.authToken
         },
         body: JSON.stringify(payload)
       });
-
       const data = await res.json();
-      console.log(data);
+      this.loading = false;
+
       if (data.status === 'failure') {
-        this.result = 'Failure';
-        console.log('save web token failure');
+        this.result = `Failure: Check if you added tokens to the device group chosen`;
       } else {
-        this.result = data.result;
-        console.log('save web token success');
+        this.result = `
+        Message successfully sent to device group.
+        Success: ${data.result.success}
+        Failure: ${data.result.failure}`;
       }
     }
   }
