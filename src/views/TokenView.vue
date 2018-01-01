@@ -1,9 +1,6 @@
 <template lang="html">
   <div class="demo-grid mdc-layout-grid">
     <div class="mdc-layout-grid__inner">
-      <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet" v-show="!hasToken">
-        <Token />
-      </div>
       <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
         <TokenList />
       </div>
@@ -13,7 +10,6 @@
 
 <script lang="ts">
 import TokenList from '../components/token/TokenList.vue';
-import Token from '../components/Token.vue';
 
 
 export default {
@@ -28,7 +24,7 @@ export default {
   },
 
   components: {
-    Token, TokenList
+    TokenList
   }
 
 }

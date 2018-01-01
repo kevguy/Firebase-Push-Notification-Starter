@@ -19,7 +19,10 @@
         <AddToken />
       </div>
       <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
-        Remove Token from Device Group
+        Change Token from One Device Group to another
+      </div>
+      <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
+        Remove Token? Is it too complicated?
       </div>
     </div>
   </div>
