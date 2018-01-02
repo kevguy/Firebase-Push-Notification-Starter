@@ -16,6 +16,9 @@
         <TokenList />
       </div>
       <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
+        <ChangeLang />
+      </div>
+      <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
         <AddToken />
       </div>
       <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
@@ -33,6 +36,7 @@ import AddToken from '../components/deviceGroup/AddToken.vue';
 import DeviceGroupMessage from '../components/deviceGroup/DeviceGroupMessage.vue';
 import DeviceGroupList from '../components/deviceGroup/DeviceGroupList.vue';
 import TokenList from '../components/deviceGroup/TokenList.vue';
+import ChangeLang from '../components/deviceGroup/ChangeLang.vue';
 
 export default {
   name: 'device-group-page',
@@ -43,7 +47,7 @@ export default {
 
   components: {
     AddToken, DeviceGroupMessage,
-    DeviceGroupList, TokenList
+    DeviceGroupList, TokenList, ChangeLang
   }
 
 }

@@ -5,7 +5,7 @@ import customMessage from './firebase-api/custom-message';
 import directMessage from './firebase-api/direct-message';
 import saveToken from './firebase-api/save-token';
 import retrieveTokens from './firebase-api/retrieve-tokens';
-import { queryDeviceGroup, queryTokenList } from './firebase-api/device-group';
+import { queryDeviceGroup, queryTokenList, changeLang } from './firebase-api/device-group';
 import * as User from './controllers/UserController';
 import * as jwt from 'jsonwebtoken';
 
@@ -67,6 +67,11 @@ export default function apiRoutes(app: Application): void {
     const langKey = req.params.lang === 'zh-hk' ? 'zh_hk' : 'en';
     const deviceGroup = req.params.userId + '_' + langKey;
     queryTokenList(deviceGroup, req, res, next);
+  });
+
+  app.post('/api/device-group/change-lang', (req: Request, res: Response, next: NextFunction) => {
+    const { userId, token, targetLang }: any = req.body;
+    changeLang(userId, token, targetLang, req, res, next);
   });
 
   /*

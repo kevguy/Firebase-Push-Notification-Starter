@@ -4,21 +4,18 @@ import { Observable, Observer } from 'rxjs/Rx';
 import { queryTokenStream } from './TokenController';
 
 export function queryDeviceGroupStream(userId: string) {
-  const stream = Observable.create((observer: Observer<any>) => {
+  return Observable.create((observer: Observer<any>) => {
     DeviceGroup.find({ userId }, (err, result) => {
       if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
       const itemsToBeSent = result.map((item) => ((<any>item).deviceGroup));
       observer.next(itemsToBeSent);
       observer.complete();
-      console.log(result);
     });
   });
-  return stream;
 }
 
 export function queryTokenListFromDeviceGroupStream(deviceGroup: string) {
-  const tokenResult = [];
-  const stream = Observable.create((observer: Observer<any>) => {
+  return Observable.create((observer: Observer<any>) => {
     DeviceGroup.findOne({ deviceGroup }, (err, result) => {
       if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
       observer.next((<any>result).tokens);
@@ -28,17 +25,44 @@ export function queryTokenListFromDeviceGroupStream(deviceGroup: string) {
   .flatMap((result) => {
     if (result) {
       const streams = result.map((item) => queryTokenStream(item));
-      return Observable.merge(...streams)
-        .reduce((acc: Array<any>, curr) => [...acc, curr], []);
-    } else {
-      return Observable.of([]);
+      return Observable.merge(...streams).reduce((acc: Array<any>, curr) => [...acc, curr], []);
     }
+    return Observable.of([]);
   });
+}
+
+export function checkTokenFromDeviceGroupStream(token: string, deviceGroup: string) {
+  // query token list from device group, then verify if token exists
+  const stream = queryTokenListFromDeviceGroupStream(deviceGroup)
+    .flatMap((result: Array<string>) => {
+      console.log('in checkTokenFromDeviceGroupStream flatmap');
+      console.log(result);
+
+      if (result.length > 0) {
+        const arr = result.map((item: any) => item.token);
+        if (arr.indexOf(token) >= 0) {
+          return Observable.of({
+            deviceGroup,
+            found: true
+          });
+        } else {
+          return Observable.of({
+            deviceGroup,
+            found: false
+          });
+        }
+      } else {
+        return Observable.of({
+          deviceGroup,
+          found: false
+        });
+      }
+    });
   return stream;
 }
 
 export function addTokenToDeviceGroupStream(data: DeviceGroupRecord) {
-  const stream = Observable.create((observer: Observer<any>) => {
+  return Observable.create((observer: Observer<any>) => {
     DeviceGroup.findOne({ deviceGroup: data.deviceGroup }, (err, existingGroup) => {
       if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
       let deviceGroupData: any;
@@ -62,9 +86,7 @@ export function addTokenToDeviceGroupStream(data: DeviceGroupRecord) {
           tokens: [data.token]
         };
       }
-      DeviceGroup.findOneAndUpdate(
-          { deviceGroup: data.deviceGroup },
-          deviceGroupData,
+      DeviceGroup.findOneAndUpdate({ deviceGroup: data.deviceGroup }, deviceGroupData,
           { upsert: true, new: true }, (err, existingGroup) => {
         if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
         observer.next({ status: 'success', msg: `token saved to device group ${data.deviceGroup}`, result: existingGroup });
@@ -72,11 +94,10 @@ export function addTokenToDeviceGroupStream(data: DeviceGroupRecord) {
       })
     });
   });
-  return stream;
 }
 
 export function removeTokenFromDeviceGroupStream(data: DeviceGroupRecord) {
-  const stream = Observable.create((observer: Observer<any>) => {
+  return Observable.create((observer: Observer<any>) => {
     DeviceGroup.findOne({ deviceGroup: data.deviceGroup }, (err, existingGroup) => {
       if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
       if (!existingGroup) {
@@ -107,5 +128,4 @@ export function removeTokenFromDeviceGroupStream(data: DeviceGroupRecord) {
       }
     });
   });
-  return stream;
 }

@@ -1,0 +1,7 @@
+whatever page user goes to, do authentication
+
+authenticated => business as usual
+
+not authenticated => redirects to login/signup Page
+
+whatever fetch request to firebase-api, use "email and password" or token
