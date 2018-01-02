@@ -110,6 +110,7 @@ export default {
   created() {
 
   },
+  mounted() { (<any>window).mdc.textField.MDCTextField.attachTo(document.querySelector('.mdc-text-field')); },
   computed: {
     userId() { return this.$store.state.userId; },
     debugUsers () { return this.$store.state.debugUsers; },

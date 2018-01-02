@@ -1,14 +1,15 @@
 import { Application, Request, Response, NextFunction } from 'express';
 import { Observable } from 'rxjs/Rx';
-import { setupDatabase } from './custom-firebase/database/utils';
-import * as users from './custom-firebase/database/users';
 import * as userGroups from './custom-firebase/database/userGroups';
-import { getConfig } from './custom-firebase/index';
 import sendNotification from './custom-firebase/push-notification/device-group';
 
+/**
+ * Create Observable that sends a custom message to a device group
+ * @param data {CustomMsg} data that contains userId, title, message, lang
+ * @returns {Observable} the observable
+ */
 export function createSendCustomMsgToDeviceGroupStream (data: CustomMsg): Observable<any> {
-  const database = setupDatabase(getConfig());
-  const customMessage: any = {
+  const customMessage: FirebaseMsg = {
     title: data.title,
     body: data.message
   };
@@ -17,15 +18,19 @@ export function createSendCustomMsgToDeviceGroupStream (data: CustomMsg): Observ
     lang: data.lang
   };
   const stream = Observable.fromPromise(userGroups.retrieveNotificationKey(record))
-    .flatMap((result: string) => {
-      console.info(`found notification id: ${result}`);
-      return Observable.fromPromise(sendNotification(result, customMessage));
-    })
+    .flatMap((notifitcationId: string) =>
+      Observable.fromPromise(sendNotification(notifitcationId, customMessage)))
     .flatMap((result: any) => Observable.of({ ...result, status: 'success' }));
   return stream;
 }
 
-
+/**
+ * Handles /api/custom-message
+ * @param data {CustomMsg} data that contains userId, title, message, lang
+ * @param req {Request} request
+ * @param res {Response} response
+ * @param next {Next} next
+ */
 export default function customMsgHandler (data: CustomMsg, req: Request, res: Response, next: NextFunction): void {
   let payload: Payload;
 
@@ -36,6 +41,6 @@ export default function customMsgHandler (data: CustomMsg, req: Request, res: Re
         payload = { status: 'failure', result: err };
         res.send(JSON.stringify(payload));
       },
-      () => { console.info(payload); res.send(JSON.stringify(payload)); }
+      () => { res.send(JSON.stringify(payload)); }
     );
 }

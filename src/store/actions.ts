@@ -22,7 +22,79 @@ import { ActionTree, ActionContext, Dispatch, Commit } from "vuex";
 //   rootGetters?: any;
 // }
 
+function setupFirebase() {
+  const config: any = {
+    apiKey: "AIzaSyATXSrM1qq7L-H_xVtF0rwLpPjlbR-7cOo",
+    authDomain: "kevchat-a5b6f.firebaseapp.com",
+    databaseURL: "https://kevchat-a5b6f.firebaseio.com",
+    projectId: "kevchat-a5b6f",
+    storageBucket: "kevchat-a5b6f.appspot.com",
+    messagingSenderId: "788651942380"
+  };
+  firebase.initializeApp(config);
+}
+
+async function askMsgPermission() {
+  const messaging: any = firebase.messaging();
+  try {
+    const result = await messaging.requestPermission();
+    return true;
+  } catch (err) {
+    console.error('Unable to get permission to notify.', err);
+    return false;
+  }
+}
+
+async function retrieveToken() {
+  const messaging: any = firebase.messaging();
+  const url = `/api/token`;
+
+  const registration = await navigator.serviceWorker.register('/service-worker.js');
+  messaging.useServiceWorker(registration);
+  const currentToken = await messaging.getToken();
+  if (!currentToken) {
+    console.error('An error occurred while retrieving token.');
+    return;
+  };
+  console.log('get token!');
+  console.log(currentToken);
+  return currentToken;
+}
+
+function startMessageListener(commit: any) {
+  const messaging: any = firebase.messaging();
+  messaging.onMessage((payload) => {
+    console.log("Message received. ", payload);
+    commit('SET_SHOW_SNACKBAR_MESSAGE', {
+      message: `${payload.notification.title} - ${payload.notification.body}`, actionText: ''
+    });
+    commit('SET_SHOW_SNACKBAR', true);
+  });
+}
+
 export default <ActionTree<State, any>>{
+  INIT_FIREBASE: async ({ commit, state, dispatch }: any) => {
+    if (state.isAuth) { console.log('its authenticated'); }
+
+    if (state.isFirebaseSetup) {
+      console.info('firebase is setup');
+    }
+
+    if (state.isAuth && !state.isFirebaseSetup) {
+      setupFirebase();
+      const result = await askMsgPermission();
+      if (result) {
+        const token = await retrieveToken();
+        await dispatch('SAVE_WEB_PUSH_TOKEN', {
+          token: token,
+          lang: 'en'
+        });
+        startMessageListener(commit);
+        commit('SET_FIREBASE_SETUP', true);
+      }
+    }
+  },
+
   UPDATE_AUTH_STATE: async ({ commit, state }: any) => {
     // const authToken = localStorage ? localStorage.getItem('authToken') : '';
     // const currentUserId = localStorage ? localStorage.getItem('userId') : '';

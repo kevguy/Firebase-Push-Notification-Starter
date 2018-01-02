@@ -44,29 +44,31 @@ export default {
     };
   },
   async mounted () {
-    console.info('mounted');
-    /**
-     * First, verify if user has logged in yet
-     * If user has logged in, setup Firebase if it hasn't
-     *  - then Ask message permission
-     *
-     */
-    if (this.isAuth) {
-      console.info('its authenticated!');
-    }
-
-    if (this.isFirebaseSetup) {
-      console.info('firebase is setup');
-    }
-
-    if (this.isAuth && !this.isFirebaseSetup) {
-      this.setupFirebase();
-      const result = await this.askMsgPermission();
-      if (result) {
-        this.retrieveToken();
-        this.startMessageListener();
-      }
-    }
+    // console.info('mounted');
+    // /**
+    //  * First, verify if user has logged in yet
+    //  * If user has logged in, setup Firebase if it hasn't
+    //  *  - then Ask message permission
+    //  *
+    //  */
+    // if (this.isAuth) {
+    //   console.info('its authenticated!');
+    // }
+    //
+    // if (this.isFirebaseSetup) {
+    //   console.info('firebase is setup');
+    // }
+    //
+    // if (this.isAuth && !this.isFirebaseSetup) {
+    //   this.setupFirebase();
+    //   const result = await this.askMsgPermission();
+    //   if (result) {
+    //     this.retrieveToken();
+    //     this.startMessageListener();
+    //     this.$store.commit('SET_FIREBASE_SETUP', true);
+    //   }
+    // }
+    await this.$store.dispatch('INIT_FIREBASE');
   },
   computed: {
     userId() { return this.$store.state.userId; },

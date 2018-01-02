@@ -4,8 +4,8 @@ import sendNotification from './custom-firebase/push-notification/individual-dev
 
 /**
  * Sends Custom Message to a device
- * @param req {Request} the Request
- * @param res {Response} the Response
+ * @param data {DirectMsg} data
+ * @returns {Observable<any>}
  */
 export function createStream (data: DirectMsg): Observable<any> {
   const customMessage: FirebaseMsg = {
@@ -17,8 +17,14 @@ export function createStream (data: DirectMsg): Observable<any> {
   return stream;
 }
 
+/**
+ * Handles /api/direct-message
+ * @param data {DirectMsg} data
+ * @param req {Request} the Request
+ * @param res {Response} the Response
+ * @param next {Next} the Next
+ */
 export default function directMsgHandler (data: DirectMsg, req: Request, res: Response, next: NextFunction): void {
-  // res.setHeader('Content-Type', 'application/json');
   let payload: Payload;
 
   createStream(data)

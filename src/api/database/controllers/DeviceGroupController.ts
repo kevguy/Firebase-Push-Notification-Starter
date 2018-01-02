@@ -110,6 +110,7 @@ export function removeTokenFromDeviceGroupStream(data: DeviceGroupRecord) {
         DeviceGroup.remove({ deviceGroup: data.deviceGroup }, (err) => {
           if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
           observer.next({ status: 'success', msg: `token deleted from device group ${data.deviceGroup}` });
+          observer.complete();
         });
       } else {
         deviceGroupData =  {
@@ -124,7 +125,7 @@ export function removeTokenFromDeviceGroupStream(data: DeviceGroupRecord) {
           if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
           observer.next({ status: 'success', msg: `token deleted from device group ${data.deviceGroup}` });
           observer.complete();
-        })
+        });
       }
     });
   });

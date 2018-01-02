@@ -39,7 +39,7 @@
           class="mdc-list-item token-list--table-row token--wrap-text"
           v-for="item in groupList">
           <span class="mdc-list-item__text">
-            {{item[0]}}
+            {{item}}
           </span>
         </li>
       </ul>

@@ -102,7 +102,14 @@ export default {
       console.log('retrieving token');
       const finalUrl = `/api/tokens/${this.destUserId}`;
       this.loading = true;
-      fetch(finalUrl)
+      fetch(finalUrl, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'x-access-token': this.$store.state.authToken
+        }
+      })
       .then(res => res.json())
       .then((data) => {
         this.loading = false;
@@ -110,13 +117,15 @@ export default {
         if (data.status === 'failure') {
           this.tokenList = [];
         } else {
-          this.tokenList = Object.keys(data.result).map((key) => {
-            return {
-              token: key,
-              type: data.result[key].type,
-              lang: data.result[key].lang
-            }
-          });
+          this.tokenList = data.result;
+          // this.tokenList = Object.keys(data.result).map((key) => {
+          //   return {
+          //     token: key,
+          //     type: data.result[key].type,
+          //     lang: data.result[key].lang
+          //   }
+          // });
+          console.log(data);
         }
       })
       .catch((err) => {

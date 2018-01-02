@@ -36,8 +36,11 @@ export function queryTokenStream(token: string) {
 export function findTokensStream(userId: string) {
   const stream = Observable.create((observer: Observer<any>) => {
     Token.find({ userId }, (err, records) => {
+      console.log('findTokensStreams')
       if (err) { observer.error({ status: 'failure', msg: 'database error' }); }
-      observer.next({ status: 'success', msg: `data retrieved`, result: records });
+      console.log(records);
+      observer.next(records);
+      observer.complete();
     });
   });
   return stream;

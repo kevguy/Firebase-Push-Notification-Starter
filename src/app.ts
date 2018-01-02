@@ -35,6 +35,7 @@ export function createApp() {
     if (inBrowser) {
       console.log('inBrowser');
       const result = await store.dispatch('UPDATE_AUTH_STATE');
+      const result2 = await store.dispatch('INIT_FIREBASE');
     }
 
     if (to.fullPath === '/signup' && store.state.isAuth) {

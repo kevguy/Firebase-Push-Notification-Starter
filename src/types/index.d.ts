@@ -5,7 +5,7 @@ declare interface Handlers {
 }
 
 declare type TokenType = 'web' | 'android' | 'ios';
-declare type LangType = 'zh-hk' | 'en' | 'all';
+declare type LangType = 'zh-hk' | 'en';
 
 declare interface TokenRecord {
   type: TokenType;
@@ -23,6 +23,12 @@ declare interface DeviceGroupRecord {
 declare interface Payload {
   status: 'success' | 'failure' | 'unknown';
   result?: any;
+}
+
+declare interface ChangeLangType {
+  userId: string;
+  token: string;
+  targetLang: LangType;
 }
 
 declare interface DirectMsg {

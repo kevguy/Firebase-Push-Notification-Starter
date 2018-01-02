@@ -4,8 +4,8 @@ import { setupDatabase } from './custom-firebase/database/utils';
 import * as users from './custom-firebase/database/users';
 import * as userGroups from './custom-firebase/database/userGroups';
 import { getConfig } from './custom-firebase/index';
-import * as MongoToken from '../controllers/TokenController';
-import * as MongoDeviceGroup from '../controllers/DeviceGroupController';
+import * as Token from './database/controllers/TokenController';
+import * as DeviceGroup from './database/controllers/DeviceGroupController';
 
 export function saveUserStream(database: any, record: TokenRecord) {
   return Observable.fromPromise(
@@ -43,24 +43,19 @@ export default function saveToken(
   const deviceGroupName = record.userId + '_' + langKey;
 
   const notificationKeyStream = createNotificationKeyStream(record);
-  const saveTokenStream = MongoToken.saveTokenStream(record);
-  const addTokenToDeviceGroupStream = MongoDeviceGroup.addTokenToDeviceGroupStream({
+  const saveTokenStream = Token.saveTokenStream(record);
+  const addTokenToDeviceGroupStream = DeviceGroup.addTokenToDeviceGroupStream({
     deviceGroup: deviceGroupName,
     userId: record.userId,
     token: record.token
   });
 
-  const stream = MongoDeviceGroup.queryDeviceGroupStream(record.userId)
+  const stream = DeviceGroup.queryDeviceGroupStream(record.userId)
     .flatMap(() => notificationKeyStream)
     .flatMap((result: any) => Observable.merge(
       saveTokenStream,
       addTokenToDeviceGroupStream
   ));
-  // const stream = notificationKeyStream
-  //   .flatMap((result: any) => Observable.merge(
-  //     saveTokenStream,
-  //     addTokenToDeviceGroupStream
-  //   ));
 
   stream.subscribe(
     (result: {}) => { payload.result.push(result); },
