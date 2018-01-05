@@ -7,7 +7,7 @@
             <a href="/" class="mdc-toolbar__menu-icon"><i class="material-icons">&#xE5C4;</i></a>
           </span> -->
           <button class="app-menu material-icons mdc-toolbar__menu-icon" v-on:click.stop="openDrawer()">menu</button>
-          <span class="mdc-toolbar__title catalog-title">Ice Ice Baby: {{$store.state.isAuth}} {{deviceUserId}} - {{deviceToken}}</span>
+          <span class="mdc-toolbar__title catalog-title">Fuck Ice Ice Baby: {{$store.state.isAuth}} {{deviceUserId}} - {{deviceToken}}</span>
         </section>
         <section class="mdc-toolbar__section mdc-toolbar__section--align-end" role="toolbar">
           <a href="#" class="material-icons mdc-toolbar__icon" aria-label="Download" alt="Download">file_download</a>
@@ -186,5 +186,20 @@ html {
   padding-left: 16px;
   padding-right: 16px;
   overflow: auto;
+}
+
+pre, .pre-style {
+  font: 14px/20px Roboto Mono,monospace;
+  margin: 16px 0;
+  overflow-x: auto;
+  padding: 8px;
+  position: relative;
+}
+
+code, pre, .pre-style {
+  background: #f7f7f7;
+  color: #37474f;
+  font: 400 70%/1 Roboto Mono,monospace;
+  padding: 1px 4px;
 }
 </style>

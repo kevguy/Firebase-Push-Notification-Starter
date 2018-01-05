@@ -50,6 +50,16 @@ declare interface FirebaseMsg {
   body: string;
 }
 
+declare interface TopicMsg {
+  topic: string,
+  msg: FirebaseMsg
+}
+
+declare interface BroadcastMsg {
+  lang: string,
+  msg: FirebaseMsg
+}
+
 declare var MyUntypedLibrary: any;
 
 declare var browser: any;

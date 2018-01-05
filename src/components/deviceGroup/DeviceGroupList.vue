@@ -21,14 +21,16 @@
     </section>
     <hr class="mdc-list-divider separating-line">
     <section class="mdc-card__primary">
-      fetch('https://iceicebaby.com/api/device-group/groups/{{destUserId}}',{<br>
-      &ensp;method: 'GET',<br>
-      &ensp;headers: {<br>
-      &ensp;&ensp;'Accept': 'application/json',<br>
-      &ensp;&ensp;'Content-Type': 'application/json',<br>
-      &ensp;&ensp;'x-access-token': {{$store.state.authToken}}<br>
-      &ensp;}<br>
-      });<br>
+      <pre class="prettyprint">
+fetch('https://iceicebaby.com/api/device-group/groups/{{destUserId}}',{
+  method: 'GET',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'x-access-token': {{$store.state.authToken}}
+  }
+});
+      </pre>
     </section>
     <hr class="mdc-list-divider separating-line">
     <section class="mdc-card__supporting-text" v-show="groupList.length > 0 || loading">

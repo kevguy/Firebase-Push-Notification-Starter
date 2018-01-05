@@ -17,6 +17,9 @@
         <router-link class="mdc-list-item" active-class="mdc-temporary-drawer--selected" tag="a" to="/direct-message-info" exact>
           <i class="material-icons mdc-list-item__start-detail" aria-hidden="true">inbox</i>Direct Message
         </router-link>
+        <router-link class="mdc-list-item" active-class="mdc-temporary-drawer--selected" tag="a" to="/topic-info" exact>
+          <i class="material-icons mdc-list-item__start-detail" aria-hidden="true">inbox</i>Topics
+        </router-link>
 
         <a class="mdc-list-item mdc-temporary-drawer--selected" href="#">
           <i class="material-icons mdc-list-item__start-detail" aria-hidden="true">inbox</i>Inbox

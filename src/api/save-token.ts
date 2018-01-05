@@ -6,14 +6,15 @@ import * as userGroups from './custom-firebase/database/userGroups';
 import { getConfig } from './custom-firebase/index';
 import * as Token from './database/controllers/TokenController';
 import * as DeviceGroup from './database/controllers/DeviceGroupController';
+import * as topics from './custom-firebase/push-notification/topic';;
 
-export function saveUserStream(database: any, record: TokenRecord) {
-  return Observable.fromPromise(
-    users.updateUser(database, record))
-    .flatMap((result) =>
-      Observable.of({ status: 'success', msg: 'saved user successfully' }))
-    .do(() => { console.log('saved user'); });
-}
+// export function saveUserStream(database: any, record: TokenRecord) {
+//   return Observable.fromPromise(
+//     users.updateUser(database, record))
+//     .flatMap((result) =>
+//       Observable.of({ status: 'success', msg: 'saved user successfully' }))
+//     .do(() => { console.log('saved user'); });
+// }
 
 export function createNotificationKeyStream(record: TokenRecord) {
   console.log(record);
@@ -50,12 +51,45 @@ export default function saveToken(
     token: record.token
   });
 
-  const stream = DeviceGroup.queryDeviceGroupStream(record.userId)
-    .flatMap(() => notificationKeyStream)
-    .flatMap((result: any) => Observable.merge(
-      saveTokenStream,
-      addTokenToDeviceGroupStream
-  ));
+  const stream = Token.queryTokenStream(token)
+    .flatMap((res: any) => {
+      console.log('querying token info for first loading');
+      console.log(res);
+      if (res.hasOwnProperty('token')) {
+        return DeviceGroup.queryDeviceGroupStream(record.userId)
+          .flatMap(() => notificationKeyStream)
+          .flatMap((result: any) => Observable.merge(
+            saveTokenStream,
+            addTokenToDeviceGroupStream
+        ));
+      } else {
+        return Observable.of({
+          status: 'success',
+          msg: 'token already exists in database'
+        });
+      }
+    })
+    .flatMap((res: any) =>
+      (Observable.fromPromise(topics.subscribeTokenToTopic(token, 'test'))))
+    .flatMap((res: any) =>
+      (Observable.fromPromise(topics.subscribeTokenToTopic(token, `welcome__${langKey}`))))
+    .flatMap((result: any) => {
+      console.info('after subscribeTokenToTopic');
+      console.log(result);
+      const msg: FirebaseMsg = {
+        body: 'qwerty',
+        title: 'qwerty'
+      };
+      return Observable.fromPromise(topics.sendMsgToTopic(msg, 'test'));
+    })
+    .flatMap((result: any) => {
+      console.info('after sendMsgToTopic');
+      console.log(result);
+      return Observable.of({
+        status: 'success',
+        msg: 'success'
+      });
+    });
 
   stream.subscribe(
     (result: {}) => { payload.result.push(result); },

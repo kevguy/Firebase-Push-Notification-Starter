@@ -5,8 +5,12 @@ import customMessage from './api/custom-message';
 import directMessage from './api/direct-message';
 import saveToken from './api/save-token';
 import retrieveTokens from './api/retrieve-tokens';
-import { queryDeviceGroup, queryTokenList, changeLang } from './api/device-group';
+import { queryDeviceGroup, queryTokenList } from './api/device-group';
+import changeLang from './api/change-lang';
 import * as User from './api/database/controllers/UserController';
+
+import * as Topics from './api/topic-op';
+
 import * as jwt from 'jsonwebtoken';
 
 // verifyAuthToken
@@ -95,6 +99,21 @@ export default function apiRoutes(app: Application): void {
   app.post('/api/custom-message',
     (req: Request, res: Response, next: NextFunction): void => {
     customMessage(<CustomMsg>(req.body), req, res, next);
+  });
+
+  app.post('/api/topic-message',
+    (req: Request, res: Response, next: NextFunction): void => {
+    Topics.sendMsg(<TopicMsg>(req.body), req, res, next);
+  });
+
+  app.post('/api/broadcast-message',
+    (req: Request, res: Response, next: NextFunction): void => {
+    Topics.sendBroadcastMsg(<BroadcastMsg>req.body, req, res, next);
+  });
+
+  app.post('/api/welcome-message',
+    (req: Request, res: Response, next: NextFunction): void => {
+    Topics.sendWelcomeMsg(req, res, next);
   });
 
   /*

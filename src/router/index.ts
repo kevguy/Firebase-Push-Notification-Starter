@@ -6,8 +6,9 @@ Vue.use(Router);
 // route-level code splitting
 const TokenView = () => import('../views/TokenView.vue');
 const DeviceGroupView = () => import('../views/DeviceGroupView.vue');
-const DirectMessage = () => import('../views/DirectMessageView.vue');
+const DirectMessageView = () => import('../views/DirectMessageView.vue');
 const Authentication = () => import('../views/Authentication.vue');
+const TopicView = () => import('../views/TopicView.vue');
 
 export function createRouter (): Router {
   return new Router({
@@ -17,7 +18,8 @@ export function createRouter (): Router {
     routes: [
       { path: '/tokens-info', component: TokenView },
       { path: '/device-group-info', component: DeviceGroupView },
-      { path: '/direct-message-info', component: DirectMessage },
+      { path: '/direct-message-info', component: DirectMessageView },
+      { path: '/topic-info', component: TopicView },
       { path: '/signup', component: Authentication },
       // { path: '/', redirect: '/tokens-info' }
       { path: '/', redirect: '/device-group-info' }

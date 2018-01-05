@@ -2,36 +2,37 @@
   <div class="demo-grid mdc-layout-grid">
     <div class="mdc-layout-grid__inner">
       <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
-        <TokenList />
+        <SendMsg />
       </div>
       <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
-        Add Token?
+        <BroadcastMsg />
+      </div>
+      <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
+        <WelcomeMsg />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import TokenList from '../components/token/TokenList.vue';
+import SendMsg from '../components/topic/SendMsg.vue';
+import BroadcastMsg from '../components/topic/BroadcastMsg.vue';
+import WelcomeMsg from '../components/topic/WelcomeMsg.vue';
 
 
 export default {
-  name: 'token-page',
+  name: 'topic-page',
 
   mounted() {
-    console.log('token page mounted');
-  },
-
-  computed: {
-    hasToken() { return this.$store.state.deviceToken !== ''; }
+    console.log('topic page mounted');
   },
 
   components: {
-    TokenList
+    SendMsg, BroadcastMsg, WelcomeMsg
   }
 
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
 </style>

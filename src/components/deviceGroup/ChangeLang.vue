@@ -48,9 +48,8 @@
       </form>
     </section>
     <section class="mdc-card__primary" v-show="result || loading">
-      <Spinner v-bind:show="loading" />
       <h2 class="mdc-card__subtitle">Result:</h2>
-      {{result}}
+      {{result}} <Spinner v-bind:show="loading" />
     </section>
     <section class="mdc-card__actions">
       <button class="mdc-button mdc-button--compact mdc-card__action" v-on:click="sendRequest()">Punch It!</button>
@@ -77,7 +76,7 @@ export default {
   },
   methods: {
     async sendRequest() {
-
+      this.result = undefined;
       const payload = {
         userId: this.destUserId,
         token: this.destToken,
@@ -104,7 +103,7 @@ export default {
       if (data.status === 'failure') {
         this.result = `Failure`;
       } else {
-        this.result = `Success`;
+        this.result = `Success: ${data.result.msg}`;
       }
     }
   }

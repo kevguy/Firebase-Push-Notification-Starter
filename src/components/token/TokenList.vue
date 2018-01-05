@@ -21,20 +21,9 @@
     </section>
     <hr class="mdc-list-divider separating-line">
     <section class="mdc-card__primary">
-      <form action="#">
-        OR pick a debug User ID:
-        <div class="mdc-select">
-          <select class="mdc-select__surface" v-model="chosenDebugUser">
-            <option value="">Choose...</option>
-            <option v-for="user in debugUsers" v-bind:value="user.userId">{{user.username}}</option>
-          </select>
-          <div class="mdc-select__bottom-line"></div>
-        </div>
-      </form>
-    </section>
-    <hr class="mdc-list-divider separating-line">
-    <section class="mdc-card__primary">
-      fetch('https://iceicebaby.com/api/tokens/{{destUserId || chosenDebugUser}}')
+      <pre class="prettyprint">
+fetch('https://iceicebaby.com/api/tokens/{{destUserId}}')
+      </pre>
     </section>
     <section class="mdc-card__supporting-text" v-show="tokenList.length > 0 || loading">
       <Spinner v-bind:show="loading" />
@@ -67,26 +56,7 @@ export default {
     return {
       tokenList: [],
       destUserId: '',
-      loading: false,
-      chosenDebugUser: ''
-    }
-  },
-  created() {
-    // this.sendRequest();
-  },
-
-  computed: {
-    debugUsers () {
-      return this.$store.state.debugUsers;
-    }
-  },
-
-  watch: {
-    destUserId(val) {
-      if (val) { this.chosenDebugUser = ''; }
-    },
-    chosenDebugUser(val) {
-      if (val) { this.destUserId = ''; }
+      loading: false
     }
   },
 
@@ -96,10 +66,6 @@ export default {
 
   methods: {
     sendRequest() {
-      if (this.chosenDebugUser) {
-        this.destUserId = this.chosenDebugUser;
-      }
-      console.log('retrieving token');
       const finalUrl = `/api/tokens/${this.destUserId}`;
       this.loading = true;
       fetch(finalUrl, {
@@ -118,14 +84,6 @@ export default {
           this.tokenList = [];
         } else {
           this.tokenList = data.result;
-          // this.tokenList = Object.keys(data.result).map((key) => {
-          //   return {
-          //     token: key,
-          //     type: data.result[key].type,
-          //     lang: data.result[key].lang
-          //   }
-          // });
-          console.log(data);
         }
       })
       .catch((err) => {

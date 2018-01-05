@@ -127,21 +127,21 @@ async function tokenOp(operator: 'add' | 'remove', record: TokenRecord): Promise
     });
   }
 
-  
-  if (notificationKey) {
-    console.log('saving stuff to database');
-    const database = setupDatabase(getConfig());
-    const signInResult = await signIn(getConfig());
-    console.log('signed in');
-    // save to database
-    const newChildRef = database.ref(`deviceGroup/${userId}_${langKey}`).push();
-    // console.log(`new key is ${newChildRef.key}`)
 
-    // this should work too
-    // return newChildRef.set({ type, token });
-    console.log('saving stuff to database');
-    await database.ref(`deviceGroup/${userId}_${langKey}/${newChildRef.key}`).set({ type, token });
-  }
+  // if (notificationKey) {
+  //   console.log('saving stuff to database');
+  //   const database = setupDatabase(getConfig());
+  //   const signInResult = await signIn(getConfig());
+  //   console.log('signed in');
+  //   // save to database
+  //   const newChildRef = database.ref(`deviceGroup/${userId}_${langKey}`).push();
+  //   // console.log(`new key is ${newChildRef.key}`)
+  //
+  //   // this should work too
+  //   // return newChildRef.set({ type, token });
+  //   console.log('saving stuff to database');
+  //   await database.ref(`deviceGroup/${userId}_${langKey}/${newChildRef.key}`).set({ type, token });
+  // }
 
   return notificationKey;
 }
