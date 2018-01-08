@@ -85,16 +85,7 @@ export default {
     async sendMessage() {
       this.result = undefined;
       this.loading = true;
-      // if (!this.chosenLang ||
-      //   (!this.destUserId && !this.chosenDebugUser)) {
-      //   this.result = 'All fields must be filled!';
-      //   return;
-      // }
-      //
-      // if (this.chosenDebugUser) {
-      //   this.destUserId = this.chosenDebugUser;
-      // }
-
+      
       const payload = {
         lang: this.chosenLang,
         msg: {

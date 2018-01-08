@@ -13,25 +13,13 @@
         <div>
           <div class="mdc-form-field">
             <div class="mdc-text-field" data-mdc-auto-init="MDCTextField">
-              <input id="topic-send-msg-type" type="text" class="mdc-text-field__input" v-model="destType">
+              <input id="topic-send-msg-type" type="text" class="mdc-text-field__input" v-model="destTopic">
               <label for="topic-send-msg-type" class="mdc-text-field__label">
-                Type
+                Topic
               </label>
               <div class="mdc-text-field__bottom-line"></div>
             </div>
           </div>
-        </div>
-      </form>
-    </section>
-    <section class="mdc-card__primary">
-      <form action="#">
-        Choose Language:
-        <div class="mdc-select">
-          <select class="mdc-select__surface" v-model="chosenLang">
-            <option value="">Choose...</option>
-            <option v-for="lang in availableLangs" v-bind:value="lang">{{lang}}</option>
-          </select>
-          <div class="mdc-select__bottom-line"></div>
         </div>
       </form>
     </section>
@@ -62,6 +50,25 @@
         </div>
       </form>
     </section>
+    <section class="mdc-card__primary">
+      <pre class="prettyprint">
+fetch('https://iceicebaby.com/api/topic-message',{
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'x-access-token': {{$store.state.authToken}}
+  },
+  body: JSON.stringify({
+    topic: '{{destTopic}}',
+    msg: {
+      title: '{{title}}',
+      body: '{{message}}'
+    }
+  })
+});
+      </pre>
+    </section>
     <section class="mdc-card__primary" v-show="result || loading">
       <Spinner v-bind:show="loading" />
       <h2 class="mdc-card__subtitle">Result:</h2>
@@ -82,8 +89,6 @@ export default {
   data() {
     return {
       destTopic: '',
-      destType: '',
-      chosenLang: '',
       title: '',
       message: '',
       result: undefined,
@@ -98,28 +103,12 @@ export default {
   },
   mounted() { (<any>window).mdc.textField.MDCTextField.attachTo(document.querySelector('.mdc-text-field')); },
   computed: {
-    userId() { return this.$store.state.userId; },
-    debugUsers () { return this.$store.state.debugUsers; },
-    availableLangs() { return this.$store.state.availableLangs; }
-  },
-  asyncData ({ store }) {
-    return store
-      .dispatch('FETCH_DEBUG_USERS')
-      .dispatch('FETCH_AVAILABLE_LANGS');
+    userId() { return this.$store.state.userId; }
   },
   methods: {
     async sendMessage() {
       this.result = undefined;
       this.loading = true;
-      // if (!this.chosenLang ||
-      //   (!this.destUserId && !this.chosenDebugUser)) {
-      //   this.result = 'All fields must be filled!';
-      //   return;
-      // }
-      //
-      // if (this.chosenDebugUser) {
-      //   this.destUserId = this.chosenDebugUser;
-      // }
 
       const payload = {
         topic: this.destTopic,

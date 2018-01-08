@@ -78,10 +78,7 @@ export default function changeLang(req: Request, res: Response, next: NextFuncti
   };
 
   const stream = Token.queryTokenStream(token)
-    .flatMap((res: any) => {
-      tokenInfo = res;
-      return Observable.of(tokenInfo);
-    })
+    .do((res: any) => { tokenInfo = res; })
     .flatMap((result) => DeviceGroup.queryDeviceGroupStream(userId))
     .flatMap((result: Array<string>) => {
       // find the device group the token belongs to
@@ -103,49 +100,40 @@ export default function changeLang(req: Request, res: Response, next: NextFuncti
         return Observable.throw('Original Device Group Not Found');
       }
     })
-    .flatMap((result: string) => {
-      originalGroupName = result;
-      return removeTokenStream({
+    .do((result: string) => { originalGroupName = result; })
+    .flatMap((result: string) => Observable.merge(
+      removeTokenStream({
         type: <TokenType>(tokenInfo.type),
         token,
         userId,
         lang: <LangType>(tokenInfo.lang)
-      });
-    })
-    .flatMap((result: any) => addTokenStream({
-      type: <TokenType>(tokenInfo.type),
-      token,
-      userId,
-      lang: <LangType>(targetLang)
-    }))
-    .flatMap((result: any) => {
-      const langKey = utils.getLangKey(tokenInfo.lang);      
-      console.log(`unsubscribing token from ${'broadcast__' + langKey}`);
-      return Observable.fromPromise(unsubscribeFromTopic(
-        tokenInfo.token, 'broadcast__' + langKey));
-    })
-    .flatMap((result: any) => {
-      console.log(`subscribing token to ${targetTopicName}`);
-      return Observable.fromPromise(subscribeTokenToTopic(
-        tokenInfo.token, targetTopicName));
-    })
-    .flatMap((result: any) => {
-      // update token info
-      console.log('token info');
-      console.log(tokenInfo);
-      return Token.saveTokenStream({
+      }),
+      addTokenStream({
+        type: <TokenType>(tokenInfo.type),
+        token,
+        userId,
+        lang: <LangType>(targetLang)
+      })
+    ).last())
+    .flatMap((result: any) => Observable.merge(
+      Observable.fromPromise(
+        unsubscribeFromTopic(tokenInfo.token, utils.getBroadcastTopicName(tokenInfo.lang))
+      ),
+      Observable.fromPromise(
+        subscribeTokenToTopic(tokenInfo.token, targetTopicName))
+    ).last())
+    .flatMap((result: any) => Token.saveTokenStream({
         type: tokenInfo.type,
         lang: targetLang,
         token: tokenInfo.token,
         userId: tokenInfo.userId
-      });
-    })
-    .flatMap((result: any) => {
-      return Observable.of({
+      })
+    )
+    .map((result: any) => ({
         status: 'success',
         msg: `Device Group changed from ${originalGroupName} to ${targetGroupName}`
-      });
-    });
+      })
+    );
   stream.subscribe(
     (result: {}) => {
       payload.result = result;

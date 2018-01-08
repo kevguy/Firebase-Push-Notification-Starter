@@ -65,7 +65,8 @@ export async function retrieveNotificationKey(record: Partial<TokenRecord>): Pro
   .then((res) => {
     if (res.error) {
       console.error(`[DeviceGroup/retrieveNotificationKey]: failed to retrieve notification key from userId ${userId}: ${res.error}`);
-      throw new Error(res.error);
+      // throw new Error(res.error);
+      return undefined;
     }
     return res;
   });

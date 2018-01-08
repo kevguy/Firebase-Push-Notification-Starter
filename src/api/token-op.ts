@@ -34,7 +34,7 @@ export function topicsSubscriptionStream(token: string, lang: LangType) {
 
   return Observable.merge(
     Observable.fromPromise(topics.subscribeTokenToTopic(token, 'test')),
-    Observable.fromPromise(topics.subscribeTokenToTopic(token, `welcome__${langKey}`)))
+    Observable.fromPromise(topics.subscribeTokenToTopic(token, `broadcast__${langKey}`)))
     .last();
 }
 
