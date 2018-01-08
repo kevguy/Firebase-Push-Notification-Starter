@@ -33,6 +33,18 @@
       </form>
     </section>
     <hr class="mdc-list-divider separating-line">
+    <section class="mdc-card__primary">
+      <pre class="prettyprint lang-js">
+fetch('https://iceicebaby.com/api/device-group/tokens/{{destUserId}}/{{chosenLang}}', {
+  method: 'GET',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'x-access-token': '{{$store.state.authToken}}'
+  }
+});
+      </pre>
+    </section>
     <section class="mdc-card__supporting-text" v-show="tokenList.length > 0 || loading">
       <Spinner v-bind:show="loading" />
       <ul class="mdc-list mdc-list--two-line mdc-list--dense demo-list token-list--table-body">
@@ -71,9 +83,9 @@ export default {
   },
   methods: {
     async sendRequest() {
-      const url = `/api/device-group/tokens/${this.userId}/${this.chosenLang}`;
+      const url = `/api/device-group/tokens/${this.destUserId}/${this.chosenLang}`;
       this.loading = true;
-      const res = await fetch(`/api/device-group/tokens/${this.destUserId}/${this.chosenLang}`, {
+      const res = await fetch(url, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',

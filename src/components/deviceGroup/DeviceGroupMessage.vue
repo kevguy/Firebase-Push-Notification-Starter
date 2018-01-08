@@ -25,7 +25,7 @@
         </div>
       </form>
     </section>
-    <section class="mdc-card__primary">
+    <section class="mdc-card__primary" v-show="false">
       <form action="#">
         OR pick a debug User ID:
         <div class="mdc-select">
@@ -76,6 +76,24 @@
           </div>
         </div>
       </form>
+    </section>
+    <section class="mdc-card__primary">
+      <pre class="prettyprint lang-js">
+fetch('https://iceicebaby.com/api/custom-message',{
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'x-access-token': '{{$store.state.authToken}}'
+  },
+  body: JSON.stringify({
+    userId: '{{destUserId}}',
+    title: '{{title}}',
+    message: '{{message}}',
+    lang: '{{chosenLang}}'
+  })
+});
+      </pre>
     </section>
     <section class="mdc-card__primary" v-show="result || loading">
       <Spinner v-bind:show="loading" />

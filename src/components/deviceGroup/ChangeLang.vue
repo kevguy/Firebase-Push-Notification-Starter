@@ -9,8 +9,8 @@
         <div>
           <div class="mdc-form-field">
             <div class="mdc-text-field" data-mdc-auto-init="MDCTextField">
-              <input id="token-dest-user-id" type="text" class="mdc-text-field__input" v-model="destUserId">
-              <label for="token-dest-user-id" class="mdc-text-field__label">
+              <input id="change-lang-dest-user-id" type="text" class="mdc-text-field__input" v-model="destUserId">
+              <label for="change-lang-dest-user-id" class="mdc-text-field__label">
                 User ID
               </label>
               <div class="mdc-text-field__bottom-line"></div>
@@ -46,6 +46,23 @@
           </div>
         </div>
       </form>
+    </section>
+    <section class="mdc-card__primary">
+      <pre class="prettyprint lang-js">
+fetch('https://iceicebaby.com/api/device-group/change-lang',{
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'x-access-token': '{{$store.state.authToken}}'
+  },
+  body: JSON.stringify({
+    userId: '{{destUserId}}',
+    token: '{{destToken}}',
+    targetLang: '{{chosenLang}}'
+  })
+});
+      </pre>
     </section>
     <section class="mdc-card__primary" v-show="result || loading">
       <h2 class="mdc-card__subtitle">Result:</h2>

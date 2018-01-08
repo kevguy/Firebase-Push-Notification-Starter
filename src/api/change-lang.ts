@@ -2,8 +2,9 @@ import { Application, Request, Response, NextFunction } from 'express';
 import * as DeviceGroup from './database/controllers/DeviceGroupController';
 import * as Token from './database/controllers/TokenController';
 import { Observable, Observer } from 'rxjs/Rx';
-import { createNotificationKeyStream } from './save-token';
-import * as userGroups from './custom-firebase/database/userGroups';
+import { createNotificationKeyStream } from './token-op';
+// import * as userGroups from './custom-firebase/database/userGroups';
+import * as pushNotification from './custom-firebase/push-notification/device-group';
 import { subscribeTokenToTopic, unsubscribeFromTopic } from './custom-firebase/push-notification/topic';
 
 /**
@@ -38,7 +39,7 @@ export function removeTokenStream(record: TokenRecord) {
   const deviceGroupName = record.userId + '_' + langKey;
 
   return Observable
-    .fromPromise(userGroups.removeToken(record))
+    .fromPromise(pushNotification.removeToken(record))
     .flatMap((res: any) => {
       console.log('\n\n\n\n');
       console.log('after removeToken');

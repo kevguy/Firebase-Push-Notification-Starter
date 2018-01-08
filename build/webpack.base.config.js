@@ -73,7 +73,15 @@ module.exports = {
   plugins: isProd
     ? [
         new webpack.optimize.UglifyJsPlugin({
-          compress: { warnings: false }
+          // eliminate comments
+          comments: false,
+          compress: {
+            // remove warnings
+            warnings: false,
+            // drop console statements
+            // drop_console: true,
+            pure_funcs: [ 'console.info', 'console.log' ]
+          }
         }),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new ExtractTextPlugin({

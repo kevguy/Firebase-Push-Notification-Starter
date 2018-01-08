@@ -18,7 +18,11 @@ export function queryTokenListFromDeviceGroupStream(deviceGroup: string) {
   return Observable.create((observer: Observer<any>) => {
     DeviceGroup.findOne({ deviceGroup }, (err, result) => {
       if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
-      observer.next((<any>result).tokens);
+      if (result) {
+        observer.next((<any>result).tokens);
+      } else {
+        observer.next([]);
+      }
       observer.complete();
     });
   })

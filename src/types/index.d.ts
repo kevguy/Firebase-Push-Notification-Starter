@@ -31,33 +31,9 @@ declare interface ChangeLangType {
   targetLang: LangType;
 }
 
-declare interface DirectMsg {
-  title: string;
-  message: string;
-  token: TokenType;
-  type: string;
-}
-
-declare interface CustomMsg {
-  userId: string;
-  title: string;
-  message: string;
-  lang: LangType;
-}
-
 declare interface FirebaseMsg {
   title: string;
   body: string;
-}
-
-declare interface TopicMsg {
-  topic: string,
-  msg: FirebaseMsg
-}
-
-declare interface BroadcastMsg {
-  lang: string,
-  msg: FirebaseMsg
 }
 
 declare var MyUntypedLibrary: any;
