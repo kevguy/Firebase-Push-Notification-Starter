@@ -101,9 +101,6 @@ export function saveToken(
     req: Request, res: Response, next: NextFunction): void {
 
   const { userId, token, lang }: Partial<TokenRecord> = record;
-  const langKey = utils.getLangKey(record.lang);
-  const deviceGroupName = utils.getDeviceGroupName(record.userId, record.lang);
-
   const stream = Token.queryTokenStream(token) // query if token already exists
     .flatMap((res: any) => {
       if (res.hasOwnProperty('token')) { return saveNewTokenStream(record); }
@@ -111,13 +108,13 @@ export function saveToken(
     })
     // subscribe token to topics
     .flatMap((res: any) => topicsSubscriptionStream(token, lang))
-    .flatMap((result: any) => {
-      // for testing purpose
-      return Observable.fromPromise(topics.sendMsgToTopic({
-        body: 'qwerty',
-        title: 'qwerty'
-      }, 'test'));
-    })
+    // .flatMap((result: any) => {
+    //   // for testing purpose
+    //   return Observable.fromPromise(topics.sendMsgToTopic({
+    //     body: 'qwerty',
+    //     title: 'qwerty'
+    //   }, 'test'));
+    // })
     .map((result: any) => ({
       status: 'success',
       msg: 'successfully saved token'

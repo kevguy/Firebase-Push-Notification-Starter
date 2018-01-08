@@ -7,6 +7,8 @@ import { createNotificationKeyStream } from './token-op';
 import * as pushNotification from './custom-firebase/push-notification/device-group';
 import { subscribeTokenToTopic, unsubscribeFromTopic } from './custom-firebase/push-notification/topic';
 
+import * as utils from './utils';
+
 /**
  * Adds token from device group and in MongoDB
  * @param record {TokenRecord} the token record
@@ -110,16 +112,14 @@ export default function changeLang(req: Request, res: Response, next: NextFuncti
         lang: <LangType>(tokenInfo.lang)
       });
     })
+    .flatMap((result: any) => addTokenStream({
+      type: <TokenType>(tokenInfo.type),
+      token,
+      userId,
+      lang: <LangType>(targetLang)
+    }))
     .flatMap((result: any) => {
-      return addTokenStream({
-        type: <TokenType>(tokenInfo.type),
-        token,
-        userId,
-        lang: <LangType>(targetLang)
-      });
-    })
-    .flatMap((result: any) => {
-      const langKey = tokenInfo.lang === 'zh-hk' ? 'zh_hk' : 'en';
+      const langKey = utils.getLangKey(tokenInfo.lang);      
       console.log(`unsubscribing token from ${'broadcast__' + langKey}`);
       return Observable.fromPromise(unsubscribeFromTopic(
         tokenInfo.token, 'broadcast__' + langKey));
