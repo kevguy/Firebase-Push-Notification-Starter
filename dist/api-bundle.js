@@ -1058,7 +1058,7 @@ function apiRoutes(app) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony export freakOut */
+/* unused harmony export addAndRemoveToken */
 /* unused harmony export checkTokenFromDeviceGroupStream */
 /* harmony export (immutable) */ __webpack_exports__["a"] = changeLang;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__database_controllers_DeviceGroupController__ = __webpack_require__(3);
@@ -1078,88 +1078,26 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 
 
 
+// import * as userGroups from './custom-firebase/database/userGroups';
 
 
-// /**
-//  * Adds token from device group and in MongoDB
-//  * @param record {TokenRecord} the token record
-//  * @returns {Observable<any>} the observable
-//  */
-// export function addTokenStream(record: TokenRecord): Observable<any> {
-//   const langKey = utils.getLangKey(record.lang);
-//   const deviceGroupName = utils.getDeviceGroupName(record.userId, record.lang);
-//
-//   const notificationKeyStream = createNotificationKeyStream(record);
-//   const _saveTokenStream = Token.saveTokenStream(record);
-//   const _addTokenToDeviceGroupStream = DeviceGroup.addTokenToDeviceGroupStream({
-//     deviceGroup: deviceGroupName,
-//     userId: record.userId,
-//     token: record.token
-//   });
-//
-//   return notificationKeyStream
-//     .flatMap((result: any) => (_saveTokenStream))
-//     .flatMap((result: any) => (_addTokenToDeviceGroupStream));
-// }
-//
-// /**
-//  * Removes token from device group and in MongoDB
-//  * @param record {TokenRecord} the token record
-//  * @returns {Observable<any>} the observable
-//  */
-// export function removeTokenStream(record: TokenRecord): Observable<any> {
-//   const langKey = utils.getLangKey(record.lang);
-//   const deviceGroupName = utils.getDeviceGroupName(record.userId, record.lang);
-//
-//   return Observable
-//     .fromPromise(pushNotification.removeToken(record))
-//     .flatMap((res: any) => DeviceGroup.removeTokenFromDeviceGroupStream({
-//       deviceGroup: deviceGroupName,
-//       userId: record.userId,
-//       token: record.token
-//     }));
-// }
-function freakOut(tokenInfo, targetLang) {
+function addAndRemoveToken(tokenInfo, targetLang) {
     var record = {
         type: tokenInfo.type,
         token: tokenInfo.token,
         userId: tokenInfo.userId,
         lang: tokenInfo.lang
     };
-    var stream1 = Object(__WEBPACK_IMPORTED_MODULE_3__utils_saveToken__["a" /* addTokenStream */])(__assign({}, record, { lang: targetLang }));
-    var stream2 = Object(__WEBPACK_IMPORTED_MODULE_3__utils_saveToken__["c" /* removeTokenStream */])(record);
-    return __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__["Observable"].concat(stream2, stream1).last();
+    var addStream = Object(__WEBPACK_IMPORTED_MODULE_3__utils_saveToken__["a" /* addTokenStream */])(__assign({}, record, { lang: targetLang }))
+        .do(function (result) {
+        console.info("[Change Lang]: added token to " + targetLang + " and subscribed to the right topic");
+    });
+    var removeStream = Object(__WEBPACK_IMPORTED_MODULE_3__utils_saveToken__["c" /* removeTokenStream */])(record)
+        .do(function (result) {
+        console.info("[Change Lang]: removed token from " + tokenInfo.lang + " and unsubscribed from the right topic");
+    });
+    return __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__["Observable"].concat(removeStream, addStream).last();
 }
-// export function removeAndAddToken(
-//   token: string,
-//   userId: string,
-//   tokenInfo: TokenRecord,
-//   targetLang: string): Observable<any> {
-//   return Observable.merge(
-//     removeTokenStream({
-//       type: <TokenType>(tokenInfo.type),
-//       token,
-//       userId,
-//       lang: <LangType>(tokenInfo.lang)
-//     }),
-//     addTokenStream({
-//       type: <TokenType>(tokenInfo.type),
-//       token,
-//       userId,
-//       lang: <LangType>(targetLang)
-//     })
-//   ).last()
-// }
-//
-// export function unsubscribeAndSubscribe(tokenInfo: TokenRecord, topicName: string): Observable<any> {
-//   return Observable.merge(
-//     Observable.fromPromise(
-//       unsubscribeFromTopic(tokenInfo.token, utils.getBroadcastTopicName(tokenInfo.lang))
-//     ),
-//     Observable.fromPromise(
-//       subscribeTokenToTopic(tokenInfo.token, topicName))
-//   ).last()
-// }
 /**
  * Loop through a list of device groups and find if a token exists inside
  * Note that it'll only find one even if the token is in multiple device groups
@@ -1211,7 +1149,7 @@ function changeLang(req, res, next) {
         console.info("[Change Lang]: found matched device group: " + result);
         originalGroupName = result;
     })
-        .flatMap(function (res) { return freakOut(tokenInfo, targetLang); })
+        .flatMap(function (res) { return addAndRemoveToken(tokenInfo, targetLang); })
         .flatMap(function (result) { return __WEBPACK_IMPORTED_MODULE_1__database_controllers_TokenController__["c" /* saveTokenStream */]({
         type: tokenInfo.type,
         lang: targetLang,

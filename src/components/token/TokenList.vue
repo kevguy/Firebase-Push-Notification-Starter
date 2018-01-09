@@ -29,7 +29,7 @@ fetch('https://iceicebaby.com/api/tokens/{{destUserId}}')
       <Spinner v-bind:show="loading" />
       <ul class="mdc-list mdc-list--two-line mdc-list--dense demo-list token-list--table-body">
         <li
-          class="mdc-list-item token-list--table-row token--wrap-text"
+          class="mdc-list-item token-list--table-row token--wrap-text device-group-token-list--list-item"
           v-for="item in tokenList">
           <span class="mdc-list-item__text">
             {{item.type}} ({{item.lang}})
@@ -120,6 +120,10 @@ export default {
     display: inline-block;
     white-space: normal;
     margin-bottom: 8px;
+  }
+
+  li.mdc-list-item.token-list--table-row.token--wrap-text.device-group-token-list--list-item {
+    height: auto;
   }
 
 </style>
