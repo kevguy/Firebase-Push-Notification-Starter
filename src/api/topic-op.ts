@@ -1,8 +1,8 @@
 import { Application, Request, Response, NextFunction } from 'express';
-import * as topics from './custom-firebase/push-notification/topic';
 import { Observable } from 'rxjs/Rx';
 
 import * as utils from './utils';
+import sendTopicStream from './utils/sendTopic';
 
 declare interface TopicMsg {
   topic: string,
@@ -15,19 +15,6 @@ declare interface BroadcastMsg {
 }
 
 /**
- * Create an Observable for sending message to a topic
- * @param msg {FirebaseMsg} messages to be sent
- * @param topic {string} the topic name
- */
-export function topicStream(msg: FirebaseMsg, topic: string): Observable<any> {
-  return Observable.fromPromise(topics.sendMsgToTopic(msg, 'test'))
-    .flatMap((res: any) => {
-      if (res.error) { return Observable.throw('fail to send message'); }
-      return Observable.of('message sent');
-    });
-}
-
-/**
  * Send a message to a specific topic,
  * @param data {TopicMsg} messages to be sent and topic name
  * @param req {Request} request
@@ -37,7 +24,7 @@ export function topicStream(msg: FirebaseMsg, topic: string): Observable<any> {
 export function sendTopicMsg(
   data: TopicMsg,
   req: Request, res: Response, next: NextFunction): void {
-  utils.handler(topicStream(data.msg, data.topic), req, res, next);
+  utils.handler(sendTopicStream(data.msg, data.topic), req, res, next);
 }
 
 /**
@@ -56,7 +43,7 @@ export function sendBroadcastMsg(
     topic: utils.getBroadcastTopicName(<LangType>item.lang),
     msg: item.msg
   }))
-  .map((data: TopicMsg) => topicStream(data.msg, data.topic));
+  .map((data: TopicMsg) => sendTopicStream(data.msg, data.topic));
 
   const stream = Observable.merge(...streams)
     .reduce((acc: string, curr: string) => { return acc + curr }, '');
@@ -87,7 +74,7 @@ export function sendWelcomeMsg(req: Request, res: Response, next: NextFunction):
  */
 export function sendTestMessage(req: Request, res: Response, next: NextFunction): void {
   const msg: FirebaseMsg = req.body;
-  utils.handler(topicStream(msg, 'test'), req, res, next);
+  utils.handler(sendTopicStream(msg, 'test'), req, res, next);
 }
 
 export function subscribeToTopic() {

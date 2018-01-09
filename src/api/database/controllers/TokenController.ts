@@ -18,6 +18,9 @@ export function saveTokenStream(data: TokenRecord) {
       observer.next({ status: 'success', msg: 'token saved', result: existingToken });
       observer.complete();
     });
+  })
+  .do((res: any) => {
+    console.info(`[TokenController/saveTokenStream]: token saved to database`);
   });
   return stream;
 };
@@ -29,6 +32,9 @@ export function queryTokenStream(token: string) {
       observer.next(result);
       observer.complete();
     });
+  })
+  .do((res: any) => {
+    console.info(`[TokenController/queryTokenStream]: queried token`);
   });
   return stream;
 }
@@ -44,10 +50,9 @@ export function findTokensStream(userId: string) {
       }
       observer.complete();
     });
+  })
+  .do((res: any) => {
+    console.info(`[TokenController/findTokensStream]: found token`);
   });
   return stream;
-}
-
-export function changeLangStream(data: TokenRecord) {
-  return saveTokenStream(data);
 }

@@ -85,9 +85,16 @@ export default <ActionTree<State, any>>{
       const result = await askMsgPermission();
       if (result) {
         const token = await retrieveToken();
+
+        let chosenLang = localStorage.getItem('chosen_lang');
+        if (!chosenLang) {
+          chosenLang = 'en';
+          localStorage.setItem('chosen_lang', 'en');
+        }
+
         await dispatch('SAVE_WEB_PUSH_TOKEN', {
           token: token,
-          lang: 'en'
+          lang: chosenLang
         });
         startMessageListener(commit);
         commit('SET_FIREBASE_SETUP', true);

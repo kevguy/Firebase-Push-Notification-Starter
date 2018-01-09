@@ -86,7 +86,7 @@ export default {
       chosenLang: 'en',
       availableLang: ['zh-hk', 'en'],
       destUserId: 'test',
-      destToken: 'fRfj6bw5BLY:APA91bH5urGQoqmzxKe6apuKIge7aROjEU4Q75GIEz9U4nzodD6c2jPidCzUOwEvLL2dl3qWT9R9BjsZeJcUZP4L1jHi5YdT9m1fHglyvl-Ce-Q_EaMiLCuPTTLhtkgQyELp4IYSxUfc',
+      destToken: this.$store.state.webPushToken,
       loading: false,
       result: ''
     };
@@ -121,6 +121,13 @@ export default {
         this.result = `Failure`;
       } else {
         this.result = `Success: ${data.result.msg}`;
+
+        if (this.$store.state.webPushToken === this.destToken) {
+          const orgLang = localStorage.getItem('chosen_lang');
+          if (orgLang !== this.chosenLang) {
+            localStorage.setItem('chosen_lang', this.chosenLang);
+          }
+        }
       }
     }
   }

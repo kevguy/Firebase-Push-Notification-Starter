@@ -6,17 +6,20 @@ import { queryTokenStream } from './TokenController';
 export function queryDeviceGroupStream(userId: string) {
   return Observable.create((observer: Observer<any>) => {
     DeviceGroup.find({ userId }, (err, result) => {
+      console.log('queryDeviceGroupStream');
       if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
       const itemsToBeSent = result.map((item) => ((<any>item).deviceGroup));
       observer.next(itemsToBeSent);
       observer.complete();
     });
-  });
+  })
+  .do((res: any) => { console.info(`[queryDeviceGroupStream]: ${res}`); });
 }
 
 export function queryTokenListFromDeviceGroupStream(deviceGroup: string) {
   return Observable.create((observer: Observer<any>) => {
     DeviceGroup.findOne({ deviceGroup }, (err, result) => {
+      console.log('queryTokenListFromDeviceGroupStream');
       if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
       if (result) {
         observer.next((<any>result).tokens);
@@ -26,12 +29,17 @@ export function queryTokenListFromDeviceGroupStream(deviceGroup: string) {
       observer.complete();
     });
   })
+  .do((res: any) => { console.info(`[queryTokenListFromDeviceGroupStream]: list of tokens ${res}`); })
   .flatMap((result) => {
     if (result) {
       const streams = result.map((item) => queryTokenStream(item));
       return Observable.merge(...streams).reduce((acc: Array<any>, curr) => [...acc, curr], []);
     }
     return Observable.of([]);
+  })
+  .do((res: any) => {
+    console.info(`[queryTokenListFromDeviceGroupStream]: retrieved tokens info: `);
+    console.info(res);
   });
 }
 
@@ -61,6 +69,10 @@ export function checkTokenFromDeviceGroupStream(token: string, deviceGroup: stri
           found: false
         });
       }
+    })
+    .do((result: Array<string>) => {
+      console.info(`[checkTokenFromDeviceGroupStream]: tokenlist`);
+      console.info(result);
     });
   return stream;
 }
@@ -68,8 +80,12 @@ export function checkTokenFromDeviceGroupStream(token: string, deviceGroup: stri
 export function addTokenToDeviceGroupStream(data: DeviceGroupRecord) {
   return Observable.create((observer: Observer<any>) => {
     DeviceGroup.findOne({ deviceGroup: data.deviceGroup }, (err, existingGroup) => {
+      console.log('addTokenToDeviceGroupStream');
       if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
       let deviceGroupData: any;
+
+      console.log('existingGroup');
+      console.log(existingGroup);
       if (existingGroup) {
         // https://stackoverflow.com/questions/31775150/node-js-mongodb-the-immutable-field-id-was-found-to-have-been-altered
         const newTokensArr = [...(<any>existingGroup).tokens, data.token]
@@ -97,12 +113,18 @@ export function addTokenToDeviceGroupStream(data: DeviceGroupRecord) {
         observer.complete();
       })
     });
+  })
+  .do((res: any) => {
+    console.info(`[addTokenToDeviceGroupStream]: token saved to device group ${data.deviceGroup}`);
   });
 }
 
 export function removeTokenFromDeviceGroupStream(data: DeviceGroupRecord) {
   return Observable.create((observer: Observer<any>) => {
     DeviceGroup.findOne({ deviceGroup: data.deviceGroup }, (err, existingGroup) => {
+      console.log('removeTokenFromDeviceGroupStream');
+      console.log(existingGroup);
+      console.log(data.deviceGroup);
       if (err) { observer.error({ status: 'failure', msg: 'database error', err }); }
       if (!existingGroup) {
         observer.error({ status: 'failure', msg: 'record not found' });
@@ -132,5 +154,8 @@ export function removeTokenFromDeviceGroupStream(data: DeviceGroupRecord) {
         });
       }
     });
+  })
+  .do((res: any) => {
+    console.info(`[removeTokenFromDeviceGroupStream]: token saved to device group ${data.deviceGroup}`);
   });
 }

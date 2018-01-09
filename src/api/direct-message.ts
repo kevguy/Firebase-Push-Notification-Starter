@@ -1,28 +1,7 @@
 import { Application, Request, Response, NextFunction } from 'express';
-import { Observable } from 'rxjs/Rx';
-import sendNotification from './custom-firebase/push-notification/individual-device';
 
-declare interface DirectMsg {
-  title: string;
-  message: string;
-  token: TokenType;
-  type: string;
-}
-
-/**
- * Sends Custom Message to a device
- * @param data {DirectMsg} data
- * @returns {Observable<any>}
- */
-export function createStream (data: DirectMsg): Observable<any> {
-  const customMessage: FirebaseMsg = {
-    title: data.title,
-    body: data.message,
-  };
-  const stream = Observable.fromPromise(sendNotification(<TokenType>data.type, data.token, customMessage))
-    .map(() => ({ status: 'success', msg: `message sent to token ${data.token}` }));
-  return stream;
-}
+import { handler } from './utils';
+import directMessageStream, { DirectMsg } from './utils/directMessage';
 
 /**
  * Sends a direct message through a token
@@ -32,20 +11,12 @@ export function createStream (data: DirectMsg): Observable<any> {
  * @param next {Next} the Next
  */
 export function directMsgHandler (data: DirectMsg, req: Request, res: Response, next: NextFunction): void {
-  let payload: Payload;
-
-  createStream(data)
-    .subscribe(
-      (result: any) => { payload = { status: 'success', result }; },
-      (err: Error) => { payload = { status: 'failure', result: err }; },
-      () => { console.info(payload); res.send(JSON.stringify(payload)); }
-    );
+  const stream = directMessageStream(data)
+  handler(stream, req, res, next);
 }
 
 export default function directMsgRoutes(app: Application) {
   app.post('/api/direct-message', (req: Request, res: Response, next: NextFunction) => {
-    const { title, message, token, type }: DirectMsg = req.body;
-    const data: DirectMsg = { title, message, token, type };
-    directMsgHandler(data, req, res, next);
+    directMsgHandler(<DirectMsg>req.body, req, res, next);
   });
 }

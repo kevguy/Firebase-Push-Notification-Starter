@@ -1,7 +1,6 @@
 import { Application, Request, Response, NextFunction } from 'express';
 import { Observable } from 'rxjs/Rx';
 
-
 const LangMap: {} = {
   'zh-hk': 'zh_hk',
   'en': 'en'

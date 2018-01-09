@@ -5,34 +5,7 @@ import * as Token from './database/controllers/TokenController';
 import * as pushNotification from './custom-firebase/push-notification/device-group';
 
 import * as utils from './utils';
-
-declare interface CustomMsg {
-  userId: string;
-  title: string;
-  message: string;
-  lang: LangType;
-}
-
-/**
- * Create Observable that sends a custom message to a device group
- * @param data {CustomMsg} data that contains userId, title, message, lang
- * @returns {Observable} the observable
- */
-export function createSendCustomMsgToDeviceGroupStream (data: CustomMsg): Observable<any> {
-  const customMessage: FirebaseMsg = {
-    title: data.title,
-    body: data.message
-  };
-  const record: Partial<TokenRecord> = {
-    userId: data.userId,
-    lang: data.lang
-  };
-  const stream = Observable.fromPromise(pushNotification.retrieveNotificationKey(record))
-    .flatMap((notifitcationId: string) =>
-      Observable.fromPromise(pushNotification.sendNotification(notifitcationId, customMessage)))
-    .flatMap((result: any) => Observable.of({ ...result, status: 'success' }));
-  return stream;
-}
+import sendCustomMsgStream, { CustomMsg } from './utils/sendDeviceGroup';
 
 /**
  * Handles /api/device-group/groups/:userId
@@ -70,7 +43,7 @@ export function queryTokenList(
  * @param next {Next} next
  */
 export function customMsgHandler (data: CustomMsg, req: Request, res: Response, next: NextFunction): void {
-  utils.handler(createSendCustomMsgToDeviceGroupStream(data), req, res, next);
+  utils.handler(sendCustomMsgStream(data), req, res, next);
 }
 
 export default function deviceGroupRoutes(app: Application) {
