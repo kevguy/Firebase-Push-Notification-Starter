@@ -61,7 +61,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 15);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -121,7 +121,7 @@ function handler(stream, req, res, next) {
 /* harmony export (immutable) */ __webpack_exports__["c"] = saveTokenStream;
 /* harmony export (immutable) */ __webpack_exports__["b"] = queryTokenStream;
 /* harmony export (immutable) */ __webpack_exports__["a"] = findTokensStream;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_Token__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_Token__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__);
 
@@ -199,7 +199,7 @@ function findTokensStream(userId) {
 /* harmony export (immutable) */ __webpack_exports__["b"] = checkTokenFromDeviceGroupStream;
 /* harmony export (immutable) */ __webpack_exports__["a"] = addTokenToDeviceGroupStream;
 /* harmony export (immutable) */ __webpack_exports__["e"] = removeTokenFromDeviceGroupStream;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_DeviceGroup__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_DeviceGroup__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TokenController__ = __webpack_require__(2);
@@ -379,6 +379,12 @@ module.exports = require("mongoose");
 
 /***/ }),
 /* 5 */
+/***/ (function(module, exports) {
+
+module.exports = require("firebase/messaging");
+
+/***/ }),
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -386,9 +392,9 @@ module.exports = require("mongoose");
 /* harmony export (immutable) */ __webpack_exports__["a"] = addToken;
 /* harmony export (immutable) */ __webpack_exports__["b"] = removeToken;
 /* harmony export (immutable) */ __webpack_exports__["d"] = sendNotification;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_firebase_messaging__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_firebase_messaging__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_firebase_messaging___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_firebase_messaging__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_isomorphic_fetch__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_isomorphic_fetch__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_isomorphic_fetch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_isomorphic_fetch__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(1);
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -667,12 +673,6 @@ function sendNotification(notificationKey, msg) {
 
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-module.exports = require("firebase/messaging");
-
-/***/ }),
 /* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -686,9 +686,9 @@ module.exports = require("firebase/messaging");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__database_controllers_TokenController__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__database_controllers_DeviceGroupController__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__index__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__topicSubscription__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__notificationKey__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__custom_firebase_push_notification_device_group__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__topicSubscription__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__notificationKey__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__custom_firebase_push_notification_device_group__ = __webpack_require__(6);
 
 
 
@@ -776,9 +776,47 @@ function saveTokenStream(record) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["b"] = subscribeTokenToTopic;
-/* harmony export (immutable) */ __webpack_exports__["c"] = unsubscribeFromTopic;
+/* harmony export (immutable) */ __webpack_exports__["c"] = subscribeTokenToTopic;
+/* harmony export (immutable) */ __webpack_exports__["d"] = unsubscribeFromTopic;
 /* harmony export (immutable) */ __webpack_exports__["a"] = sendMsgToTopic;
+/* harmony export (immutable) */ __webpack_exports__["b"] = sendMsgToTopics;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(9);
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
 // https://firebase.google.com/docs/cloud-messaging/js/topic-messaging
 /**
  * success => {}
@@ -825,21 +863,66 @@ function unsubscribeFromTopic(token, topic) {
  * }
  */
 function sendMsgToTopic(msg, topic) {
-    var url = "https://fcm.googleapis.com/fcm/send";
-    var result = fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': "key=" + process.env.FIREBASE_SERVER_KEY
-        },
-        body: JSON.stringify({
-            to: "/topics/" + topic,
-            // priority: 'high',
-            notification: msg
-        })
-    })
-        .then(function (res) { return res.json(); });
-    return result;
+    return __awaiter(this, void 0, void 0, function () {
+        var url, result;
+        return __generator(this, function (_a) {
+            url = "https://fcm.googleapis.com/fcm/send";
+            result = fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': "key=" + process.env.FIREBASE_SERVER_KEY
+                },
+                body: JSON.stringify({
+                    to: "/topics/" + topic,
+                    // priority: 'high',
+                    notification: msg
+                })
+            })
+                .then(function (res) { return res.json(); });
+            return [2 /*return*/, result];
+        });
+    });
+}
+/**
+ * Send message to multiple topics
+ */
+function sendMsgToTopics(msg, topics) {
+    return __awaiter(this, void 0, void 0, function () {
+        var url, condition, accessToken, result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    url = "https://fcm.googleapis.com/v1/projects/" + process.env.FIREBASE_PROJECT_ID + "/messages:send";
+                    condition = topics
+                        .reduce(function (acc, topic) { return "|| '" + topic + "' in topics " + acc; }, '')
+                        .substr(3);
+                    console.info(condition);
+                    return [4 /*yield*/, Object(__WEBPACK_IMPORTED_MODULE_0__utils__["a" /* getAccessTokenPromise */])()];
+                case 1:
+                    accessToken = _a.sent();
+                    result = fetch(url, {
+                        method: 'POST',
+                        // headers: {
+                        //   'Content-Type': 'application/json',
+                        //   'Authorization': `key=${process.env.FIREBASE_SERVER_KEY}`
+                        // },
+                        headers: new Headers({
+                            'Content-Type': 'application/json',
+                            'Authorization': "Bearer " + accessToken
+                        }),
+                        body: JSON.stringify({
+                            "message": {
+                                "condition": condition,
+                                "notification": msg
+                            }
+                        })
+                    })
+                        .then(function (res) { return res.json(); });
+                    return [2 /*return*/, result];
+            }
+        });
+    });
 }
 
 
@@ -848,11 +931,64 @@ function sendMsgToTopic(msg, topic) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* unused harmony export setupMessaging */
+/* harmony export (immutable) */ __webpack_exports__["a"] = getAccessTokenPromise;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_firebase_app__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_firebase_app___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_firebase_app__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_firebase_messaging__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_firebase_messaging___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_firebase_messaging__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__index__ = __webpack_require__(21);
+// https://firebase.google.com/docs/web/setup
+// https://firebase.google.com/docs/cloud-messaging/js/topic-messaging
+// https://firebase.googleblog.com/2016/08/sending-notifications-between-android.html
+// https://stackoverflow.com/questions/38156239/how-to-set-the-content-type-of-request-header-when-using-fetch-api
+// https://stackoverflow.com/questions/30203044/using-an-authorization-header-with-fetch-in-react-native
+
+
+
+var google = __webpack_require__(22);
+/**
+ * Setup Firebase Real-time database
+ * @param config {FirebaseConfig} the firebase config
+ * @return {Messaging} the firebase database
+ */
+function setupMessaging(config) {
+    if (__WEBPACK_IMPORTED_MODULE_0_firebase_app__["apps"].length === 0) {
+        console.log(config);
+        __WEBPACK_IMPORTED_MODULE_0_firebase_app__["initializeApp"](config);
+    }
+    return __WEBPACK_IMPORTED_MODULE_0_firebase_app__["messaging"]();
+}
+// https://firebase.google.com/docs/cloud-messaging/auth-server
+var SCOPES = 'https://www.googleapis.com/auth/firebase.messaging';
+function getAccessTokenPromise() {
+    return new Promise(function (resolve, reject) {
+        var key = Object(__WEBPACK_IMPORTED_MODULE_2__index__["a" /* getServiceAccountInfo */])();
+        var jwtClient = new google.auth.JWT(key.client_email, undefined, // null,
+        key.private_key, SCOPES, undefined);
+        jwtClient.authorize(function (err, tokens) {
+            if (err) {
+                reject(err);
+                return;
+            }
+            console.log('fuck');
+            console.log(tokens);
+            resolve(tokens.access_token);
+        });
+    });
+}
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = createNotificationKeyStream;
 /* harmony export (immutable) */ __webpack_exports__["b"] = retrieveNotificationKeyStream;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_device_group__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_device_group__ = __webpack_require__(6);
 
 
 /**
@@ -880,39 +1016,69 @@ function retrieveNotificationKeyStream(record) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = require("isomorphic-fetch");
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = require("bcrypt-nodejs");
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = require("jsonwebtoken");
 
 /***/ }),
-/* 13 */
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = directMessageStream;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_individual_device__ = __webpack_require__(28);
+
+
+function directMessageStream(data) {
+    var customMessage = {
+        title: data.title,
+        body: data.message,
+    };
+    var stream = __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"]
+        .fromPromise(Object(__WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_individual_device__["a" /* default */])(data.type, data.token, customMessage))
+        .map(function (result) {
+        return ({
+            status: 'success',
+            msg: "message sent to token " + data.token,
+            perf: result
+        });
+    });
+    return stream;
+}
+
+
+/***/ }),
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["verifyAuthToken"] = verifyAuthToken;
 /* harmony export (immutable) */ __webpack_exports__["default"] = apiRoutes;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_change_lang__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__api_database_controllers_UserController__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jsonwebtoken__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_change_lang__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__api_database_controllers_UserController__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jsonwebtoken__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jsonwebtoken___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jsonwebtoken__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__api_device_group__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_direct_message__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__api_topic_op__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__api_token_op__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__api_device_group__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_direct_message__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__api_topic_op__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__api_token_op__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__api_performance_test__ = __webpack_require__(33);
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -948,6 +1114,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
 
 
 
@@ -1035,6 +1202,19 @@ function apiRoutes(app) {
     Object(__WEBPACK_IMPORTED_MODULE_5__api_topic_op__["a" /* default */])(app);
     // Token-related API
     Object(__WEBPACK_IMPORTED_MODULE_6__api_token_op__["a" /* default */])(app);
+    app.get('/performance-test/:time', function (req, res, next) {
+        // const msg: FirebaseMsg = {
+        //   title: 'Test',
+        //   body: 'Message'
+        // };
+        var tmp = {
+            title: 'Test',
+            message: 'Message',
+            token: 'fBFtm56fJoY:APA91bEwS3k9R0y30QoosOyPuugzr0ee-OihYE3-N9p1TL-K4aX3r4WQdD2oMAu2wDqGQIWfWYOomZ3Ad4ChbGAupfhREH42erfvAuOgOWmNaJxg0XH6W6ZDOMJZnaR_CEG9jTaxofJQ',
+            type: 'web'
+        };
+        Object(__WEBPACK_IMPORTED_MODULE_7__api_performance_test__["a" /* default */])(tmp, parseInt(req.params.time), req, res, next);
+    });
     /********************
      * User-related API *
      ********************/
@@ -1054,7 +1234,7 @@ function apiRoutes(app) {
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1166,7 +1346,7 @@ function changeLang(req, res, next) {
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1183,7 +1363,7 @@ var DeviceGroup = __WEBPACK_IMPORTED_MODULE_0_mongoose__["model"]('DeviceGroup',
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1201,7 +1381,7 @@ var Token = __WEBPACK_IMPORTED_MODULE_0_mongoose__["model"]('Token', tokenSchema
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1219,7 +1399,7 @@ var Token = __WEBPACK_IMPORTED_MODULE_0_mongoose__["model"]('Token', tokenSchema
  * @returns {Observable} the Observable
  */
 function subscribeTopicStream(token, topicName) {
-    return __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].fromPromise(__WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_topic__["b" /* subscribeTokenToTopic */](token, topicName));
+    return __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].fromPromise(__WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_topic__["c" /* subscribeTokenToTopic */](token, topicName));
     // TODO: save result to database
 }
 /**
@@ -1229,13 +1409,58 @@ function subscribeTopicStream(token, topicName) {
  * @returns {Observable} the Observable
  */
 function unsubscribeTopicStream(token, topicName) {
-    return __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].fromPromise(__WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_topic__["c" /* unsubscribeFromTopic */](token, topicName));
+    return __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].fromPromise(__WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_topic__["d" /* unsubscribeFromTopic */](token, topicName));
     // TODO: remove result from database
 }
 
 
 /***/ }),
-/* 18 */
+/* 20 */
+/***/ (function(module, exports) {
+
+module.exports = require("firebase/app");
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export getConfig */
+/* harmony export (immutable) */ __webpack_exports__["a"] = getServiceAccountInfo;
+function getConfig() {
+    return {
+        apiKey: process.env.FIREBASE_API_KEY,
+        authDomain: process.env.FIREBASE_DOMAIN_KEY,
+        databaseURL: process.env.FIREBASE_DATABASE_URL,
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID
+    };
+}
+function getServiceAccountInfo() {
+    return {
+        "type": "service_account",
+        "project_id": "kevchat-a5b6f",
+        "private_key_id": "dc4806e84c1c43064e683884b9e62a2bb12e3319",
+        "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDU4J75tKyjWSQX\nWL4qww8i6xW51NTEdxxZXmYt3WuYpCpfFzpYU40KggPsTGl55cqzoOY3Py7g1mjm\nbTwCAujc7w2ceQnoAodZmQy9V8q3ygb+1rtNjjQF0SIAN3eoYbrXBfNYAhlrZS3G\n8mTJdvbsBsfYXn+NbazXzIvEuI2RZyRZkMtLNd+LklCfF9dIGX9Z/hyRIikqYt49\npanK8iTBI/ux6W62RPIfpuPWvUCdabVOJTfZ19qJLsi3S5kzqRTwzeTFU+fa3SUv\n9cUBdnmWEgfmWo9I8/6s+Hdt5R+QkrrMgfn0DOd0HD5x5zkwAdS+Sk87eVCOtUny\nb9zlofFNAgMBAAECggEAXFJwT95eEte5kdCAZN5EpcGrofTeM7humImaqeCB5eio\noaXavWy62ehKGESJZ/7TOrUYsrQZuhPy2aBdKoglgo/AaPCLbc4O8jowrrsw5SVe\nhE4PXFLEWBN7efmUUPfVhqSDhVMfwBZY1JPSRxdrfjBwonNVQTpkABErOq1JZFm6\nt2qHNFDMspwhYrbChYZN9Ijbvpv64XiejYM/rP/+Dpb5o1LwpyL6vJ8Z0xj9g65l\ncQZcITXgdi+lQDzbCR9sQ+2n/xlMiutFTsFqhL6giuQcNU/eD0l6wp4wPj8PqRMr\n3fLgPdErdTlB7rYPo1No3fuGAoz8yo9UpwLykjhCdwKBgQD3EmrJ6CHueyNqj7ek\nlHivjdSbyxjCeMwur5M1w+dqKBwDXAOtQ+sBm0IZ8fZHLCxJFhlAM6ejlCZiF0O2\nij2r2lr4X8/IW2ESeOTXJx8mvuLIA0T7865GupLM6hYoztodVTUsdv3uTz2/wmlR\nPWZecz7TTVd6QvPfsaOtY2wccwKBgQDckeGkP2D6XDSo538G1vtlD+aK+EDA4XcN\nmrXrLHbaMFxwjr5/w0g14h3x6gxIJwvGe5d2CwVk4zUEcihO1d+tfgePr4vKiuAp\nKQGrO0bu0FC9smIN/1GUjHYhzIqUWHeryA8CQQTbHs0OVm5hIfhKW7RGPl24oZBK\nC7I8XnoLPwKBgQCVhEOzpBLEqygnmIldw6u1MXN0RFfbeBa4OfAwHTmx+EvbjJd9\nBxj0g+xgnxiWwZibMhBd1eShDUqdGc8UbFwd36olnHW1nfcEorx5p2cmn2XF/JSG\nlFTm4IluEEsQrv03uxTOr8PDr5iCrzfkve9xQPTIEonZpyLGQE34463NGQKBgFkb\nZjjgkeES1wNVYm/08eLGJbEG0cIaU+pfEhdMA0fqOa4PPM6Iqed6zfYpQ4TyoUMy\nMuIxWaCEWarOI5KVvKNuQse9d4//wsdeFZqDfAiGh9fa9NoKx35nsGG/LEz54H65\nd7bFZZzQOK8OI9GB07jWi2HFWD96pbwENaFF2bApAoGBANUnVJxW0fJMh/9sYwQH\nmedP7aV7nLIFdG988p53wdvQN7CF40wCOckvW/bG/I83a7dibSj274EYSIa1deWb\nCWS+UsiNqMKgQgtzk4Id4AmLF0AVksJKH36+cP2PLexNdocL4Ku9T71IqsZn0JvC\nWaIK9klqvoH0aLg5XOJw5Zyg\n-----END PRIVATE KEY-----\n",
+        "client_email": "firebase-adminsdk-7fhc2@kevchat-a5b6f.iam.gserviceaccount.com",
+        "client_id": "112694782557192835677",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://accounts.google.com/o/oauth2/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-7fhc2%40kevchat-a5b6f.iam.gserviceaccount.com"
+    };
+}
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+module.exports = require("googleapis");
+
+/***/ }),
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1243,10 +1468,10 @@ function unsubscribeTopicStream(token, topicName) {
 /* harmony export (immutable) */ __webpack_exports__["c"] = loginHandler;
 /* harmony export (immutable) */ __webpack_exports__["a"] = authHandler;
 /* harmony export (immutable) */ __webpack_exports__["b"] = checkUserHandler;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_User__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jsonwebtoken__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_User__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jsonwebtoken__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jsonwebtoken___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jsonwebtoken__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_bcrypt_nodejs__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_bcrypt_nodejs__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_bcrypt_nodejs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_bcrypt_nodejs__);
 
 
@@ -1319,11 +1544,11 @@ function checkUserHandler(userId, req, res, next) {
 
 
 /***/ }),
-/* 19 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_bcrypt_nodejs__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_bcrypt_nodejs__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_bcrypt_nodejs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_bcrypt_nodejs__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mongoose__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mongoose___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mongoose__);
@@ -1364,7 +1589,7 @@ var User = __WEBPACK_IMPORTED_MODULE_1_mongoose__["model"]('User', userSchema);
 
 
 /***/ }),
-/* 20 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1374,7 +1599,7 @@ var User = __WEBPACK_IMPORTED_MODULE_1_mongoose__["model"]('User', userSchema);
 /* harmony export (immutable) */ __webpack_exports__["a"] = deviceGroupRoutes;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__database_controllers_DeviceGroupController__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_sendDeviceGroup__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_sendDeviceGroup__ = __webpack_require__(26);
 
 
 
@@ -1424,15 +1649,15 @@ function deviceGroupRoutes(app) {
 
 
 /***/ }),
-/* 21 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = sendCustomMsgStream;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_device_group__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__notificationKey__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_device_group__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__notificationKey__ = __webpack_require__(10);
 var __assign = (this && this.__assign) || Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
         s = arguments[i];
@@ -1470,14 +1695,14 @@ function sendCustomMsgStream(data) {
 
 
 /***/ }),
-/* 22 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export directMsgHandler */
 /* harmony export (immutable) */ __webpack_exports__["a"] = directMsgRoutes;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_directMessage__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_directMessage__ = __webpack_require__(14);
 
 
 /**
@@ -1499,29 +1724,7 @@ function directMsgRoutes(app) {
 
 
 /***/ }),
-/* 23 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = directMessageStream;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_individual_device__ = __webpack_require__(24);
-
-
-function directMessageStream(data) {
-    var customMessage = {
-        title: data.title,
-        body: data.message,
-    };
-    var stream = __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].fromPromise(Object(__WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_individual_device__["a" /* default */])(data.type, data.token, customMessage))
-        .map(function () { return ({ status: 'success', msg: "message sent to token " + data.token }); });
-    return stream;
-}
-
-
-/***/ }),
-/* 24 */
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1529,10 +1732,10 @@ function directMessageStream(data) {
 /* unused harmony export sendAndroidNotification */
 /* unused harmony export sendIOSNotification */
 /* harmony export (immutable) */ __webpack_exports__["a"] = sendNotification;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_firebase_messaging__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_firebase_messaging__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_firebase_messaging___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_firebase_messaging__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_isomorphic_fetch__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_isomorphic_fetch__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_isomorphic_fetch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_isomorphic_fetch__);
 // https://firebase.google.com/docs/web/setup
 // https://firebase.google.com/docs/cloud-messaging/js/topic-messaging
@@ -1575,6 +1778,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 
 
 
+var performance = __webpack_require__(29).performance;
+function clock(start) {
+    if (!start)
+        return process.hrtime();
+    var end = process.hrtime(start);
+    return Math.round((end[0] * 1000) + (end[1] / 1000000));
+}
+var Benchmark = /** @class */ (function () {
+    function Benchmark() {
+        this.start = process.hrtime();
+    }
+    Benchmark.prototype.elapsed = function () {
+        var end = process.hrtime(this.start);
+        return Math.round((end[0] * 1000) + (end[1] / 1000000));
+    };
+    return Benchmark;
+}());
 /**
  * Send web push notification to an individual user device
  * @param token {string} the token belong to that device
@@ -1582,13 +1802,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
  */
 function sendWebNotification(token, msg) {
     return __awaiter(this, void 0, void 0, function () {
-        var accessToken, result;
+        var startTime, accessToken, result, duration;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, Object(__WEBPACK_IMPORTED_MODULE_1__utils__["a" /* getAccessTokenPromise */])()];
+                case 0:
+                    startTime = performance.now();
+                    return [4 /*yield*/, Object(__WEBPACK_IMPORTED_MODULE_1__utils__["a" /* getAccessTokenPromise */])()];
                 case 1:
                     accessToken = _a.sent();
-                    console.log(accessToken);
                     result = __WEBPACK_IMPORTED_MODULE_2_isomorphic_fetch__(process.env.FIREBASE_PUSH_NOTIFICATION_WEB, {
                         method: 'POST',
                         headers: new Headers({
@@ -1604,13 +1825,18 @@ function sendWebNotification(token, msg) {
                     })
                         .then(function (res) { return res.json(); })
                         .then(function (result) {
-                        console.log(result);
+                        // console.log(result);
                         if (result.error) {
                             throw new Error(result);
                         }
                     })
                         .catch(function (err) { console.error(err); });
-                    return [2 /*return*/, result];
+                    duration = performance.now() - startTime;
+                    console.log(duration);
+                    return [2 /*return*/, {
+                            result: result,
+                            duration: duration
+                        }];
             }
         });
     });
@@ -1674,109 +1900,18 @@ function sendNotification(type, token, msg) {
 
 
 /***/ }),
-/* 25 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export setupMessaging */
-/* harmony export (immutable) */ __webpack_exports__["a"] = getAccessTokenPromise;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_firebase_app__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_firebase_app___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_firebase_app__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_firebase_messaging__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_firebase_messaging___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_firebase_messaging__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__index__ = __webpack_require__(27);
-// https://firebase.google.com/docs/web/setup
-// https://firebase.google.com/docs/cloud-messaging/js/topic-messaging
-// https://firebase.googleblog.com/2016/08/sending-notifications-between-android.html
-// https://stackoverflow.com/questions/38156239/how-to-set-the-content-type-of-request-header-when-using-fetch-api
-// https://stackoverflow.com/questions/30203044/using-an-authorization-header-with-fetch-in-react-native
-
-
-
-var google = __webpack_require__(28);
-/**
- * Setup Firebase Real-time database
- * @param config {FirebaseConfig} the firebase config
- * @return {Messaging} the firebase database
- */
-function setupMessaging(config) {
-    if (__WEBPACK_IMPORTED_MODULE_0_firebase_app__["apps"].length === 0) {
-        console.log(config);
-        __WEBPACK_IMPORTED_MODULE_0_firebase_app__["initializeApp"](config);
-    }
-    return __WEBPACK_IMPORTED_MODULE_0_firebase_app__["messaging"]();
-}
-// https://firebase.google.com/docs/cloud-messaging/auth-server
-var SCOPES = 'https://www.googleapis.com/auth/firebase.messaging';
-function getAccessTokenPromise() {
-    return new Promise(function (resolve, reject) {
-        var key = Object(__WEBPACK_IMPORTED_MODULE_2__index__["a" /* getServiceAccountInfo */])();
-        var jwtClient = new google.auth.JWT(key.client_email, undefined, // null,
-        key.private_key, SCOPES, undefined);
-        jwtClient.authorize(function (err, tokens) {
-            if (err) {
-                reject(err);
-                return;
-            }
-            console.log('fuck');
-            console.log(tokens);
-            resolve(tokens.access_token);
-        });
-    });
-}
-
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports) {
-
-module.exports = require("firebase/app");
-
-/***/ }),
-/* 27 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export getConfig */
-/* harmony export (immutable) */ __webpack_exports__["a"] = getServiceAccountInfo;
-function getConfig() {
-    return {
-        apiKey: process.env.FIREBASE_API_KEY,
-        authDomain: process.env.FIREBASE_DOMAIN_KEY,
-        databaseURL: process.env.FIREBASE_DATABASE_URL,
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID
-    };
-}
-function getServiceAccountInfo() {
-    return {
-        "type": "service_account",
-        "project_id": "kevchat-a5b6f",
-        "private_key_id": "dc4806e84c1c43064e683884b9e62a2bb12e3319",
-        "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDU4J75tKyjWSQX\nWL4qww8i6xW51NTEdxxZXmYt3WuYpCpfFzpYU40KggPsTGl55cqzoOY3Py7g1mjm\nbTwCAujc7w2ceQnoAodZmQy9V8q3ygb+1rtNjjQF0SIAN3eoYbrXBfNYAhlrZS3G\n8mTJdvbsBsfYXn+NbazXzIvEuI2RZyRZkMtLNd+LklCfF9dIGX9Z/hyRIikqYt49\npanK8iTBI/ux6W62RPIfpuPWvUCdabVOJTfZ19qJLsi3S5kzqRTwzeTFU+fa3SUv\n9cUBdnmWEgfmWo9I8/6s+Hdt5R+QkrrMgfn0DOd0HD5x5zkwAdS+Sk87eVCOtUny\nb9zlofFNAgMBAAECggEAXFJwT95eEte5kdCAZN5EpcGrofTeM7humImaqeCB5eio\noaXavWy62ehKGESJZ/7TOrUYsrQZuhPy2aBdKoglgo/AaPCLbc4O8jowrrsw5SVe\nhE4PXFLEWBN7efmUUPfVhqSDhVMfwBZY1JPSRxdrfjBwonNVQTpkABErOq1JZFm6\nt2qHNFDMspwhYrbChYZN9Ijbvpv64XiejYM/rP/+Dpb5o1LwpyL6vJ8Z0xj9g65l\ncQZcITXgdi+lQDzbCR9sQ+2n/xlMiutFTsFqhL6giuQcNU/eD0l6wp4wPj8PqRMr\n3fLgPdErdTlB7rYPo1No3fuGAoz8yo9UpwLykjhCdwKBgQD3EmrJ6CHueyNqj7ek\nlHivjdSbyxjCeMwur5M1w+dqKBwDXAOtQ+sBm0IZ8fZHLCxJFhlAM6ejlCZiF0O2\nij2r2lr4X8/IW2ESeOTXJx8mvuLIA0T7865GupLM6hYoztodVTUsdv3uTz2/wmlR\nPWZecz7TTVd6QvPfsaOtY2wccwKBgQDckeGkP2D6XDSo538G1vtlD+aK+EDA4XcN\nmrXrLHbaMFxwjr5/w0g14h3x6gxIJwvGe5d2CwVk4zUEcihO1d+tfgePr4vKiuAp\nKQGrO0bu0FC9smIN/1GUjHYhzIqUWHeryA8CQQTbHs0OVm5hIfhKW7RGPl24oZBK\nC7I8XnoLPwKBgQCVhEOzpBLEqygnmIldw6u1MXN0RFfbeBa4OfAwHTmx+EvbjJd9\nBxj0g+xgnxiWwZibMhBd1eShDUqdGc8UbFwd36olnHW1nfcEorx5p2cmn2XF/JSG\nlFTm4IluEEsQrv03uxTOr8PDr5iCrzfkve9xQPTIEonZpyLGQE34463NGQKBgFkb\nZjjgkeES1wNVYm/08eLGJbEG0cIaU+pfEhdMA0fqOa4PPM6Iqed6zfYpQ4TyoUMy\nMuIxWaCEWarOI5KVvKNuQse9d4//wsdeFZqDfAiGh9fa9NoKx35nsGG/LEz54H65\nd7bFZZzQOK8OI9GB07jWi2HFWD96pbwENaFF2bApAoGBANUnVJxW0fJMh/9sYwQH\nmedP7aV7nLIFdG988p53wdvQN7CF40wCOckvW/bG/I83a7dibSj274EYSIa1deWb\nCWS+UsiNqMKgQgtzk4Id4AmLF0AVksJKH36+cP2PLexNdocL4Ku9T71IqsZn0JvC\nWaIK9klqvoH0aLg5XOJw5Zyg\n-----END PRIVATE KEY-----\n",
-        "client_email": "firebase-adminsdk-7fhc2@kevchat-a5b6f.iam.gserviceaccount.com",
-        "client_id": "112694782557192835677",
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://accounts.google.com/o/oauth2/token",
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-7fhc2%40kevchat-a5b6f.iam.gserviceaccount.com"
-    };
-}
-
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports) {
-
-module.exports = require("googleapis");
-
-/***/ }),
 /* 29 */
+/***/ (function(module, exports) {
+
+module.exports = require("perf_hooks");
+
+/***/ }),
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export sendTopicMsg */
+/* unused harmony export sendMultiTopics */
 /* unused harmony export sendBroadcastMsg */
 /* unused harmony export sendWelcomeMsg */
 /* unused harmony export sendTestMessage */
@@ -1786,7 +1921,7 @@ module.exports = require("googleapis");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_sendTopic__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_sendTopic__ = __webpack_require__(31);
 
 
 
@@ -1798,7 +1933,10 @@ module.exports = require("googleapis");
  * @param next {Next} next
  */
 function sendTopicMsg(data, req, res, next) {
-    __WEBPACK_IMPORTED_MODULE_1__utils__["d" /* handler */](Object(__WEBPACK_IMPORTED_MODULE_2__utils_sendTopic__["a" /* default */])(data.msg, data.topic), req, res, next);
+    __WEBPACK_IMPORTED_MODULE_1__utils__["d" /* handler */](Object(__WEBPACK_IMPORTED_MODULE_2__utils_sendTopic__["a" /* sendTopicStream */])(data.msg, data.topic), req, res, next);
+}
+function sendMultiTopics(data, req, res, next) {
+    __WEBPACK_IMPORTED_MODULE_1__utils__["d" /* handler */](Object(__WEBPACK_IMPORTED_MODULE_2__utils_sendTopic__["b" /* sendTopicsStream */])(data.msg, data.topics), req, res, next);
 }
 /**
  * Send a broadcast message to every device via the `broadcast_XXX` topic,
@@ -1813,7 +1951,7 @@ function sendBroadcastMsg(data, req, res, next) {
         topic: __WEBPACK_IMPORTED_MODULE_1__utils__["a" /* getBroadcastTopicName */](item.lang),
         msg: item.msg
     }); })
-        .map(function (data) { return Object(__WEBPACK_IMPORTED_MODULE_2__utils_sendTopic__["a" /* default */])(data.msg, data.topic); });
+        .map(function (data) { return Object(__WEBPACK_IMPORTED_MODULE_2__utils_sendTopic__["a" /* sendTopicStream */])(data.msg, data.topic); });
     var stream = __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].merge.apply(__WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"], streams).reduce(function (acc, curr) { return acc + curr; }, '');
     __WEBPACK_IMPORTED_MODULE_1__utils__["d" /* handler */](stream, req, res, next);
 }
@@ -1839,7 +1977,7 @@ function sendWelcomeMsg(req, res, next) {
  */
 function sendTestMessage(req, res, next) {
     var msg = req.body;
-    __WEBPACK_IMPORTED_MODULE_1__utils__["d" /* handler */](Object(__WEBPACK_IMPORTED_MODULE_2__utils_sendTopic__["a" /* default */])(msg, 'test'), req, res, next);
+    __WEBPACK_IMPORTED_MODULE_1__utils__["d" /* handler */](Object(__WEBPACK_IMPORTED_MODULE_2__utils_sendTopic__["a" /* sendTopicStream */])(msg, 'test'), req, res, next);
 }
 function subscribeToTopic() {
 }
@@ -1848,6 +1986,9 @@ function unsubscribeFromTopic() {
 function topicRoutes(app) {
     app.post('/api/topic-message', function (req, res, next) {
         sendTopicMsg(req.body, req, res, next);
+    });
+    app.post('/api/multi-topics', function (req, res, next) {
+        sendMultiTopics(req.body, req, res, next);
     });
     app.post('/api/broadcast-message', function (req, res, next) {
         sendBroadcastMsg(req.body, req, res, next);
@@ -1862,11 +2003,12 @@ function topicRoutes(app) {
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = sendTopicStream;
+/* harmony export (immutable) */ __webpack_exports__["b"] = sendTopicsStream;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_topic__ = __webpack_require__(8);
@@ -1878,7 +2020,7 @@ function topicRoutes(app) {
  * @param topic {string} the topic name
  */
 function sendTopicStream(msg, topic) {
-    return __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].fromPromise(Object(__WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_topic__["a" /* sendMsgToTopic */])(msg, 'test'))
+    return __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].fromPromise(Object(__WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_topic__["a" /* sendMsgToTopic */])(msg, topic))
         .do(function (res) {
         console.info("[utils/sendTopicStream]: send msg to topic " + topic);
     })
@@ -1892,10 +2034,28 @@ function sendTopicStream(msg, topic) {
         console.info("[utils/sendTopicStream]: successfully sent msg to topic " + topic);
     });
 }
+function sendTopicsStream(msg, topics) {
+    console.info('creating send topics stream');
+    console.info(topics);
+    return __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].fromPromise(Object(__WEBPACK_IMPORTED_MODULE_1__custom_firebase_push_notification_topic__["b" /* sendMsgToTopics */])(msg, topics))
+        .do(function (res) {
+        console.info("[utils/sendTopicsStream]: send msg to topics " + topics);
+    })
+        .flatMap(function (res) {
+        console.log(res);
+        if (res.error) {
+            return __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].throw('fail to send message');
+        }
+        return __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].of('message sent');
+    })
+        .do(function (res) {
+        console.info("[utils/sendTopicsStream]: successfully sent msg to topics " + topics);
+    });
+}
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1938,6 +2098,76 @@ function tokenRoutes(app) {
     });
 }
 
+
+/***/ }),
+/* 33 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = testPerformanceTest;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_directMessage__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_fs__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_fs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_fs__);
+
+
+
+/**
+ * Sends a direct message through a token
+ * @param data {DirectMsg} data
+ * @param req {Request} the Request
+ * @param res {Response} the Response
+ * @param next {Next} the Next
+ */
+function testPerformanceTest(data, time, req, res, next) {
+    var streams = [];
+    var performance = [];
+    for (var i = 0; i < time; i++) {
+        streams.push(Object(__WEBPACK_IMPORTED_MODULE_1__utils_directMessage__["a" /* default */])(data));
+    }
+    var stream = __WEBPACK_IMPORTED_MODULE_0_rxjs__["Observable"].merge.apply(__WEBPACK_IMPORTED_MODULE_0_rxjs__["Observable"], streams);
+    var payload = {
+        status: 'success',
+        result: ''
+    };
+    res.send(JSON.stringify({ status: 'success', 'msg': 'started' }));
+    console.log('performance test started');
+    stream.subscribe(function (result) {
+        console.info("sent " + (performance.length + 1) + "th message");
+        var prevTotal = performance.length >= 1 ? (performance[performance.length - 1]).total : 0;
+        var total = result.perf.duration + prevTotal;
+        console.info("took: " + result.perf.duration + ", total: " + total);
+        performance.push({
+            duration: result.perf.duration,
+            total: total
+        });
+        payload.result = result;
+    }, function (err) {
+        payload.status = 'failure';
+        payload.result = err;
+        // res.send(JSON.stringify(payload));
+    }, function () {
+        var file = __WEBPACK_IMPORTED_MODULE_2_fs__["createWriteStream"]('./mika.txt');
+        file.on('error', function (err) { console.error(err); });
+        performance.forEach(function (v, idx) { file.write("idx: " + idx + ", duration: " + v.duration + ", totel: " + v.total + "\n"); });
+        file.end();
+        // res.send(JSON.stringify(payload));
+    });
+}
+
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports) {
+
+module.exports = require("rxjs");
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports) {
+
+module.exports = require("fs");
 
 /***/ })
 /******/ ]);

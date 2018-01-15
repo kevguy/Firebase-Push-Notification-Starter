@@ -4,12 +4,16 @@
       <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
         <DirectMessage />
       </div>
+      <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
+        <PerformanceTest />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import DirectMessage from '../components/directMessage/DirectMessage.vue';
+import PerformanceTest from '../components/PerformanceTest.vue';
 
 export default {
   name: 'direct-message-page',
@@ -19,7 +23,7 @@ export default {
   },
 
   components: {
-    DirectMessage
+    DirectMessage, PerformanceTest
   }
 
 }

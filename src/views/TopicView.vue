@@ -10,6 +10,9 @@
       <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
         <WelcomeMsg />
       </div>
+      <div class="demo-cell mdc-layout-grid__cell mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-8-tablet">
+        <MultipleTopics />
+      </div>
     </div>
   </div>
 </template>
@@ -18,6 +21,7 @@
 import SendMsg from '../components/topic/SendMsg.vue';
 import BroadcastMsg from '../components/topic/BroadcastMsg.vue';
 import WelcomeMsg from '../components/topic/WelcomeMsg.vue';
+import MultipleTopics from '../components/topic/MultipleTopics';
 
 
 export default {
@@ -28,7 +32,7 @@ export default {
   },
 
   components: {
-    SendMsg, BroadcastMsg, WelcomeMsg
+    SendMsg, BroadcastMsg, WelcomeMsg, MultipleTopics
   }
 
 }

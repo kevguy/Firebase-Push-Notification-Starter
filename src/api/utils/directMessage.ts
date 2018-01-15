@@ -5,8 +5,8 @@ import sendNotification from '../custom-firebase/push-notification/individual-de
 export declare interface DirectMsg {
   title: string;
   message: string;
-  token: TokenType;
-  type: string;
+  token: string;
+  type: TokenType;
 }
 
 export default function directMessageStream (data: DirectMsg): Observable<any> {
@@ -14,7 +14,14 @@ export default function directMessageStream (data: DirectMsg): Observable<any> {
     title: data.title,
     body: data.message,
   };
-  const stream = Observable.fromPromise(sendNotification(<TokenType>data.type, data.token, customMessage))
-    .map(() => ({ status: 'success', msg: `message sent to token ${data.token}` }));
+  const stream = Observable
+    .fromPromise(sendNotification(<TokenType>data.type, data.token, customMessage))
+    .map((result: any) =>
+      ({
+        status: 'success',
+        msg: `message sent to token ${data.token}`,
+        perf: result
+      })
+    );
   return stream;
 }

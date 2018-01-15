@@ -1,11 +1,8 @@
 <template lang="html">
   <div class="mdc-card">
     <section class="mdc-card__primary">
-      <h1 class="mdc-card__title mdc-card__title--large">Send to Topic</h1>
-      <h2 class="mdc-card__subtitle">Send a message through topic</h2>
-    </section>
-    <section class="mdc-card__supporting-text" style="font-style: italic;margin-top: 10px;">
-      Every token registered is automatically subscribed to the 'test' channel. Use this to send a message and broadcast it to every device.
+      <h1 class="mdc-card__title mdc-card__title--large">Send to Multiple Topics</h1>
+      <h2 class="mdc-card__subtitle">Send a message through topics</h2>
     </section>
     <hr class="mdc-list-divider separating-line">
     <section class="mdc-card__primary">
@@ -13,8 +10,8 @@
         <div>
           <div class="mdc-form-field">
             <div class="mdc-text-field" data-mdc-auto-init="MDCTextField">
-              <input id="topic-send-msg-type" type="text" class="mdc-text-field__input" v-model="destTopic">
-              <label for="topic-send-msg-type" class="mdc-text-field__label">
+              <input id="topics-send-msg-type" type="text" class="mdc-text-field__input" v-model="destTopics">
+              <label for="topics-send-msg-type" class="mdc-text-field__label">
                 Topic
               </label>
               <div class="mdc-text-field__bottom-line"></div>
@@ -29,8 +26,8 @@
         <div>
           <div class="mdc-form-field">
             <div class="mdc-text-field" data-mdc-auto-init="MDCTextField">
-              <input id="topic-send-msg-msg-title" type="text" class="mdc-text-field__input" v-model="title">
-              <label for="topic-send-msg-msg-title" class="mdc-text-field__label">
+              <input id="topics-send-msg-msg-title" type="text" class="mdc-text-field__input" v-model="title">
+              <label for="topics-send-msg-msg-title" class="mdc-text-field__label">
                 Title
               </label>
               <div class="mdc-text-field__bottom-line"></div>
@@ -41,7 +38,7 @@
           <div class="mdc-text-field mdc-text-field--textarea">
             <textarea
               v-model="message"
-              id="topic-send-msg-msg-message"
+              id="topics-send-msg-msg-message"
               class="mdc-text-field__input"
               rows="8"
               cols="40"
@@ -49,25 +46,6 @@
           </div>
         </div>
       </form>
-    </section>
-    <section class="mdc-card__primary">
-      <pre class="prettyprint">
-fetch('https://iceicebaby.com/api/topic-message',{
-  method: 'POST',
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'x-access-token': {{$store.state.authToken}}
-  },
-  body: JSON.stringify({
-    topic: '{{destTopic}}',
-    msg: {
-      title: '{{title}}',
-      body: '{{message}}'
-    }
-  })
-});
-      </pre>
     </section>
     <section class="mdc-card__primary" v-show="result || loading">
       <Spinner v-bind:show="loading" />
@@ -84,23 +62,19 @@ fetch('https://iceicebaby.com/api/topic-message',{
 import Spinner from '../Spinner.vue';
 
 export default {
-  name: 'topic-send-msg',
+  name: 'topics-send-msg',
   components: { Spinner },
   data() {
     return {
-      destTopic: '',
+      destTopics: 'welcome__zh_hk,welcome__en,test',
       title: '',
       message: '',
       result: undefined,
 
-      loading: false,
-
-      chosenDebugUser: ''
+      loading: false
     };
   },
-  created() {
-
-  },
+  created() {},
   mounted() { (<any>window).mdc.textField.MDCTextField.attachTo(document.querySelector('.mdc-text-field')); },
   computed: {
     userId() { return this.$store.state.userId; }
@@ -110,15 +84,19 @@ export default {
       this.result = undefined;
       this.loading = true;
 
+      const topics = this.destTopics.split(',');
+      console.log(this.destTopics);
+      console.log(topics);
+
       const payload = {
-        topic: this.destTopic,
+        topics,
         msg: {
           title: this.title,
           body: this.message
         }
       };
 
-      const res = await fetch(`/api/topic-message`, {
+      const res = await fetch(`/api/multi-topics`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',

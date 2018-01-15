@@ -11,14 +11,35 @@ import { getAccessTokenPromise } from './utils';
 
 import * as fetch from 'isomorphic-fetch';
 
+const { performance } = require('perf_hooks');
+
+function clock(start?: any): any {
+  if ( !start ) return process.hrtime();
+  let end: number[] = process.hrtime(start);
+  return Math.round((end[0]*1000) + (end[1]/1000000));
+}
+
+class Benchmark {
+
+    private start = process.hrtime();
+
+    public elapsed(): number {
+        const end = process.hrtime(this.start);
+        return Math.round((end[0] * 1000) + (end[1] / 1000000));
+    }
+}
+
 /**
  * Send web push notification to an individual user device
  * @param token {string} the token belong to that device
  * @param msg {FirebaseMsg} the message
  */
 export async function sendWebNotification(token: string, msg: FirebaseMsg) {
+  // const startTime = clock();
+  // const benchmark = new Benchmark();
+  const startTime = performance.now();
   const accessToken = await getAccessTokenPromise();
-  console.log(accessToken);
+  // console.log(accessToken);
   const result = fetch(process.env.FIREBASE_PUSH_NOTIFICATION_WEB, {
     method: 'POST',
     headers: new Headers({
@@ -34,11 +55,18 @@ export async function sendWebNotification(token: string, msg: FirebaseMsg) {
   })
   .then((res) => res.json())
   .then((result) => {
-    console.log(result);
+    // console.log(result);
     if (result.error) { throw new Error(result); }
   })
   .catch((err) => { console.error(err); });
-  return result;
+  // const duration: number = clock(startTime);
+  // const duration: number = benchmark.elapsed();
+  const duration = performance.now() - startTime;
+  console.log(duration);
+  return {
+    result,
+    duration
+  };
 }
 
 /**

@@ -2,11 +2,16 @@ import { Application, Request, Response, NextFunction } from 'express';
 import { Observable } from 'rxjs/Rx';
 
 import * as utils from './utils';
-import sendTopicStream from './utils/sendTopic';
+import { sendTopicStream, sendTopicsStream }  from './utils/sendTopic';
 
 declare interface TopicMsg {
   topic: string,
   msg: FirebaseMsg
+}
+
+declare interface TopicsMsg {
+  topics: string[];
+  msg: FirebaseMsg;
 }
 
 declare interface BroadcastMsg {
@@ -24,7 +29,15 @@ declare interface BroadcastMsg {
 export function sendTopicMsg(
   data: TopicMsg,
   req: Request, res: Response, next: NextFunction): void {
-  utils.handler(sendTopicStream(data.msg, data.topic), req, res, next);
+  utils.handler(sendTopicStream
+    (data.msg, data.topic), req, res, next);
+}
+
+export function sendMultiTopics(
+  data: TopicsMsg,
+  req: Request, res: Response, next: NextFunction): void {
+  utils.handler(sendTopicsStream
+    (data.msg, data.topics), req, res, next);
 }
 
 /**
@@ -91,6 +104,11 @@ export default function topicRoutes(app: Application): void {
     sendTopicMsg(<TopicMsg>req.body, req, res, next);
   });
 
+  app.post('/api/multi-topics',
+    (req: Request, res: Response, next: NextFunction): void => {
+    sendMultiTopics(<TopicsMsg>req.body, req, res, next);
+  });
+
   app.post('/api/broadcast-message',
     (req: Request, res: Response, next: NextFunction): void => {
     sendBroadcastMsg(<Array<BroadcastMsg>>req.body, req, res, next);
@@ -105,4 +123,6 @@ export default function topicRoutes(app: Application): void {
     (req: Request, res: Response, next: NextFunction): void => {
     sendTestMessage(req, res, next);
   });
+
+
 }

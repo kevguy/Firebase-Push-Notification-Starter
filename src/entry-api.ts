@@ -10,6 +10,8 @@ import directMsgRoutes from './api/direct-message';
 import topicRoutes from './api/topic-op';
 import tokenRoutes from './api/token-op';
 
+import performanceTest from './api/performance-test';
+
 // verifyAuthToken
 // -1 no token provided
 // 1 ok
@@ -80,6 +82,22 @@ export default function apiRoutes(app: Application): void {
 
   // Token-related API
   tokenRoutes(app);
+
+  app.get('/performance-test/:time', (req: Request, res: Response, next: NextFunction) => {
+    // const msg: FirebaseMsg = {
+    //   title: 'Test',
+    //   body: 'Message'
+    // };
+
+    const tmp = {
+      title: 'Test',
+      message: 'Message',
+      token: 'fBFtm56fJoY:APA91bEwS3k9R0y30QoosOyPuugzr0ee-OihYE3-N9p1TL-K4aX3r4WQdD2oMAu2wDqGQIWfWYOomZ3Ad4ChbGAupfhREH42erfvAuOgOWmNaJxg0XH6W6ZDOMJZnaR_CEG9jTaxofJQ',
+      type: <TokenType>'web'
+    };
+
+    performanceTest(tmp, parseInt(req.params.time), req, res, next);
+  });
 
   /********************
    * User-related API *

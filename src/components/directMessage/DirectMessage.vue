@@ -94,6 +94,8 @@
 </template>
 
 <script lang="ts">
+import { Observable } from 'rxjs';
+
 export default {
   name: 'direct-message',
   data() {
@@ -144,6 +146,9 @@ export default {
         this.result = data.result;
         console.log('save web token success');
       }
+    },
+    async sendMultiMessage() {
+
     }
   }
 }

@@ -1,3 +1,6 @@
+import { getAccessTokenPromise } from './utils';
+
+
 // https://firebase.google.com/docs/cloud-messaging/js/topic-messaging
 
 /**
@@ -46,7 +49,7 @@ export function unsubscribeFromTopic(token: string, topic: string) {
  *   "error": "TopicsMessageRateExceeded"
  * }
  */
-export function sendMsgToTopic(msg: FirebaseMsg, topic: string) {
+export async function sendMsgToTopic(msg: FirebaseMsg, topic: string) {
   const url = `https://fcm.googleapis.com/fcm/send`;
   const result = fetch(url, {
     method: 'POST',
@@ -58,6 +61,39 @@ export function sendMsgToTopic(msg: FirebaseMsg, topic: string) {
       to: `/topics/${topic}`,
       // priority: 'high',
       notification : msg
+    })
+  })
+  .then((res) => res.json());
+  return result;
+}
+
+
+/**
+ * Send message to multiple topics
+ */
+export async function sendMsgToTopics(msg: FirebaseMsg, topics: string[]) {
+  const url: string = `https://fcm.googleapis.com/v1/projects/${process.env.FIREBASE_PROJECT_ID}/messages:send`;
+  const condition: string = topics
+    .reduce((acc, topic) => `|| '${topic}' in topics ` + acc, '')
+    .substr(3);
+  console.info(condition);
+  const accessToken = await getAccessTokenPromise();
+
+  const result = fetch(url, {
+    method: 'POST',
+    // headers: {
+    //   'Content-Type': 'application/json',
+    //   'Authorization': `key=${process.env.FIREBASE_SERVER_KEY}`
+    // },
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    }),
+    body: JSON.stringify({
+      "message":{
+        "condition": condition,
+        "notification" : msg
+      }
     })
   })
   .then((res) => res.json());
