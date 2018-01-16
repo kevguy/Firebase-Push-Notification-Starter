@@ -895,12 +895,13 @@ function sendMsgToTopics(msg, topics) {
                 case 0:
                     url = "https://fcm.googleapis.com/v1/projects/" + process.env.FIREBASE_PROJECT_ID + "/messages:send";
                     condition = topics
-                        .reduce(function (acc, topic) { return "|| '" + topic + "' in topics " + acc; }, '')
+                        .reduce(function (acc, topic) { return "|| '" + topic + "' IN TOPICS " + acc; }, '')
                         .substr(3);
                     console.info(condition);
                     return [4 /*yield*/, Object(__WEBPACK_IMPORTED_MODULE_0__utils__["a" /* getAccessTokenPromise */])()];
                 case 1:
                     accessToken = _a.sent();
+                    console.info(accessToken);
                     result = fetch(url, {
                         method: 'POST',
                         // headers: {

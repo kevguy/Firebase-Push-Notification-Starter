@@ -74,10 +74,11 @@ export async function sendMsgToTopic(msg: FirebaseMsg, topic: string) {
 export async function sendMsgToTopics(msg: FirebaseMsg, topics: string[]) {
   const url: string = `https://fcm.googleapis.com/v1/projects/${process.env.FIREBASE_PROJECT_ID}/messages:send`;
   const condition: string = topics
-    .reduce((acc, topic) => `|| '${topic}' in topics ` + acc, '')
+    .reduce((acc, topic) => `|| '${topic}' IN TOPICS ` + acc, '')
     .substr(3);
   console.info(condition);
   const accessToken = await getAccessTokenPromise();
+  console.info(accessToken);
 
   const result = fetch(url, {
     method: 'POST',
